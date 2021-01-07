@@ -1,0 +1,126 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	0.0.0	//
+ATXCONTROLLER	atx.h	/^#define ATXCONTROLLER$/;"	d
+CONSOL_H	consol.h	/^#define CONSOL_H$/;"	d
+DECODER	decoder.h	/^#define DECODER$/;"	d
+LED	ws2812b.h	/^}LED;$/;"	t	typeref:struct:__anonc89c36f40108
+LED	ws2812b.h	/^}LED;$/;"	t	typeref:struct:__anonc89c36f40208
+LIGHTCONTROL	lightcontrol.h	/^#define LIGHTCONTROL$/;"	d
+MAX	ws2812b.c	/^#define MAX(/;"	d	file:
+MIN	ws2812b.c	/^#define MIN(/;"	d	file:
+NUMBERCOLLOR	ws2812b.h	/^			#define NUMBERCOLLOR /;"	d
+NUMBERCOLLOR	ws2812b.h	/^		#define NUMBERCOLLOR /;"	d
+NUMBERCOLLOR	ws2812b.h	/^	#define NUMBERCOLLOR /;"	d
+NUMBERINCREASE	ws2812b.h	/^			#define NUMBERINCREASE /;"	d
+NUMBERINCREASE	ws2812b.h	/^		#define NUMBERINCREASE /;"	d
+NUMBERINCREASE	ws2812b.h	/^	#define NUMBERINCREASE /;"	d
+NUMBERLED	ws2812b.h	/^#define NUMBERLED /;"	d
+NUMBERLEDSPI1	ws2812b.h	/^	#define NUMBERLEDSPI1 /;"	d
+NUMBERLEDSPI2	ws2812b.h	/^	#define NUMBERLEDSPI2 /;"	d
+NUMBERLEDSPI3	ws2812b.h	/^	#define NUMBERLEDSPI3 /;"	d
+NUMBERLEDSPI4	ws2812b.h	/^	#define NUMBERLEDSPI4 /;"	d
+OFFSETSPI1	ws2812b.h	/^	#define OFFSETSPI1 /;"	d
+OFFSETSPI2	ws2812b.h	/^	#define OFFSETSPI2 /;"	d
+OFFSETSPI3	ws2812b.h	/^	#define OFFSETSPI3 /;"	d
+OFFSETSPI4	ws2812b.h	/^	#define OFFSETSPI4 /;"	d
+SK2812SPI	ws2812b.h	/^#define SK2812SPI$/;"	d
+STRING_HELPERFUNCTIONS	string_helperfunctions.h	/^#define STRING_HELPERFUNCTIONS$/;"	d
+UART5_BUFFER	consol.h	/^#define UART5_BUFFER /;"	d
+USART5_RX_BUFFER	uart5.h	/^#define USART5_RX_BUFFER /;"	d
+USART5_TX_BUFFER	uart5.h	/^#define USART5_TX_BUFFER /;"	d
+USART5_TX_RX_RINGBUFFER	uart5.h	/^#define USART5_TX_RX_RINGBUFFER$/;"	d
+USESPI2	ws2812b.h	/^#define USESPI2$/;"	d
+USESPI3	ws2812b.h	/^#define USESPI3$/;"	d
+WAIT_HEADER	wait.h	/^#define WAIT_HEADER$/;"	d
+WS2812BHEADAER	ws2812b.h	/^#define WS2812BHEADAER$/;"	d
+__anonc89c36f40108	ws2812b.h	/^typedef struct{$/;"	s
+__anonc89c36f40208	ws2812b.h	/^typedef struct{$/;"	s
+asciihex_to_int	string_helperfunctions.c	/^uint8_t asciihex_to_int(char s)$/;"	f	typeref:typename:uint8_t
+asciinum_to_int_flex	string_helperfunctions.c	/^long long int asciinum_to_int_flex(char *s, int s_len, int num_bytes)$/;"	f	typeref:typename:long long int
+blue	ws2812b.h	/^	uint8_t blue;$/;"	m	struct:__anonc89c36f40108	typeref:typename:uint8_t
+blue	ws2812b.h	/^	uint8_t blue;$/;"	m	struct:__anonc89c36f40208	typeref:typename:uint8_t
+calculatestep	lightcontrol.c	/^void calculatestep(void)$/;"	f	typeref:typename:void
+check_uart	consol.c	/^void check_uart(void)$/;"	f	typeref:typename:void
+check_uart5	consol.c	/^void check_uart5(void)$/;"	f	typeref:typename:void
+clock_setup	main.c	/^static void clock_setup(void)$/;"	f	typeref:typename:void	file:
+consol_init	consol.c	/^void consol_init(void)$/;"	f	typeref:typename:void
+consol_puts	consol.c	/^void consol_puts(char *s)$/;"	f	typeref:typename:void
+current_hue	ws2812b.h	/^	float current_hue;$/;"	m	struct:__anonc89c36f40208	typeref:typename:float
+current_int	ws2812b.h	/^	float current_int;$/;"	m	struct:__anonc89c36f40208	typeref:typename:float
+current_sat	ws2812b.h	/^	float current_sat;$/;"	m	struct:__anonc89c36f40208	typeref:typename:float
+decoder	decoder.c	/^void decoder(char *s, int len)$/;"	f	typeref:typename:void
+disable_atx	atx.c	/^void disable_atx(void)$/;"	f	typeref:typename:void
+enable_atx	atx.c	/^void enable_atx(void)$/;"	f	typeref:typename:void
+enable_send_spi2	ws2812b.c	/^	int enable_send_spi2 = 0;  $/;"	v	typeref:typename:int
+enable_send_spi3	ws2812b.c	/^	int enable_send_spi3 = 0;$/;"	v	typeref:typename:int
+find_next_argument	string_helperfunctions.c	/^int find_next_argument(char *s, int s_length)$/;"	f	typeref:typename:int
+get_tick	wait.c	/^uint64_t get_tick(void)$/;"	f	typeref:typename:uint64_t
+green	ws2812b.h	/^	uint8_t green;$/;"	m	struct:__anonc89c36f40108	typeref:typename:uint8_t
+green	ws2812b.h	/^	uint8_t green;$/;"	m	struct:__anonc89c36f40208	typeref:typename:uint8_t
+incrementwaittimer	ws2812b.c	/^int incrementwaittimer;$/;"	v	typeref:typename:int
+inflatebyte	ws2812b.c	/^void inflatebyte(uint8_t data, int i)$/;"	f	typeref:typename:void
+inflatetwobits	ws2812b.c	/^uint8_t inflatetwobits(uint8_t data, uint8_t mask1, uint8_t mask0)$/;"	f	typeref:typename:uint8_t
+init	main.c	/^void init(void)$/;"	f	typeref:typename:void
+init_wait	wait.c	/^void init_wait(void)$/;"	f	typeref:typename:void
+initledmodule	ws2812b.c	/^void initledmodule(void)$/;"	f	typeref:typename:void
+ledbuffer	ws2812b.c	/^uint16_t ledbuffer[NUMBERLED * NUMBERCOLLOR * NUMBERINCREASE];$/;"	v	typeref:typename:uint16_t[]
+lights	ws2812b.c	/^LED lights[NUMBERLED];$/;"	v	typeref:typename:LED[]
+main	main.c	/^int main(void)$/;"	f	typeref:typename:int
+make_lower_case	string_helperfunctions.c	/^void make_lower_case(char *s, int len)$/;"	f	typeref:typename:void
+my_strcmp	string_helperfunctions.c	/^int my_strcmp(char *s, char *t, int s_len, int t_len)$/;"	f	typeref:typename:int
+myround	ws2812b.c	/^uint8_t myround (float x)$/;"	f	typeref:typename:uint8_t
+pot	string_helperfunctions.c	/^int pot(int base, int exponent)$/;"	f	typeref:typename:int
+preparebuffer	ws2812b.c	/^void preparebuffer(void)$/;"	f	typeref:typename:void
+print	consol.c	/^void print(char *s)$/;"	f	typeref:typename:void
+process_set	decoder.c	/^void process_set(char *s, int len)$/;"	f	typeref:typename:void
+red	ws2812b.h	/^	uint8_t red;$/;"	m	struct:__anonc89c36f40108	typeref:typename:uint8_t
+red	ws2812b.h	/^	uint8_t red;$/;"	m	struct:__anonc89c36f40208	typeref:typename:uint8_t
+rx_r_index	uart5.c	/^volatile uint32_t rx_r_index;$/;"	v	typeref:typename:volatile uint32_t
+rx_w_index	uart5.c	/^volatile uint32_t rx_w_index;$/;"	v	typeref:typename:volatile uint32_t
+set_stepmode	lightcontrol.c	/^int set_stepmode(int step)$/;"	f	typeref:typename:int
+sethsivalues	lightcontrol.c	/^void sethsivalues(int hue, int saturation, int intensity)$/;"	f	typeref:typename:void
+setlimitrgb	lightcontrol.c	/^void setlimitrgb(int red, int green, int blue, int offset, int length, int mode)$/;"	f	typeref:typename:void
+setmode	decoder.c	/^void setmode(char *s, int len)$/;"	f	typeref:typename:void
+setrgb	decoder.c	/^void setrgb(char *s, int len)$/;"	f	typeref:typename:void
+setrgbvalues	lightcontrol.c	/^void setrgbvalues(int red, int green, int blue)$/;"	f	typeref:typename:void
+setstepspeed	lightcontrol.c	/^void setstepspeed(void)$/;"	f	typeref:typename:void
+setup_gpio_atx	atx.c	/^void setup_gpio_atx(void)$/;"	f	typeref:typename:void
+setupdma	ws2812b.c	/^void setupdma(uint32_t dma, uint8_t stream, uint32_t channel, uint32_t spi_address, uint32_t off/;"	f	typeref:typename:void
+setuplightcontroller	lightcontrol.c	/^void setuplightcontroller(void)$/;"	f	typeref:typename:void
+setupmoduleclock	ws2812b.c	/^void setupmoduleclock(void)$/;"	f	typeref:typename:void
+setupmodulegpio	ws2812b.c	/^void setupmodulegpio(void)$/;"	f	typeref:typename:void
+setupspi	ws2812b.c	/^void setupspi(uint32_t spi)$/;"	f	typeref:typename:void
+step_hue	ws2812b.h	/^	float step_hue;$/;"	m	struct:__anonc89c36f40208	typeref:typename:float
+step_int	ws2812b.h	/^	float step_int;$/;"	m	struct:__anonc89c36f40208	typeref:typename:float
+step_sat	ws2812b.h	/^	float step_sat;$/;"	m	struct:__anonc89c36f40208	typeref:typename:float
+stepmode	lightcontrol.c	/^int stepmode;$/;"	v	typeref:typename:int
+sys_tick_handler	wait.c	/^void sys_tick_handler(void)$/;"	f	typeref:typename:void
+t	ws2812b.h	/^	int t;$/;"	m	struct:__anonc89c36f40208	typeref:typename:int
+tick	wait.c	/^volatile uint64_t tick;$/;"	v	typeref:typename:volatile uint64_t
+translate_dec_format	string_helperfunctions.c	/^long long int translate_dec_format(char *s, int s_len, int max_char)$/;"	f	typeref:typename:long long int
+translate_number_format	string_helperfunctions.c	/^long long int translate_number_format(char *s, int s_len, int max_char, int num_bit_coding)$/;"	f	typeref:typename:long long int
+tx_r_index	uart5.c	/^volatile uint32_t tx_r_index;$/;"	v	typeref:typename:volatile uint32_t
+tx_w_index	uart5.c	/^volatile uint32_t tx_w_index;$/;"	v	typeref:typename:volatile uint32_t
+uart5_buffer	consol.c	/^uint8_t uart5_buffer[UART5_BUFFER];$/;"	v	typeref:typename:uint8_t[]
+uart5_calc_rx_level	uart5.c	/^unsigned int uart5_calc_rx_level(void)$/;"	f	typeref:typename:unsigned int
+uart5_echo	consol.c	/^uint8_t uart5_echo;$/;"	v	typeref:typename:uint8_t
+uart5_isr	uart5.c	/^void uart5_isr(void)$/;"	f	typeref:typename:void
+uart5_level	consol.c	/^uint32_t uart5_level; $/;"	v	typeref:typename:uint32_t
+usart5_disable	uart5.c	/^void usart5_disable(void)$/;"	f	typeref:typename:void
+usart5_enable	uart5.c	/^void usart5_enable(void)$/;"	f	typeref:typename:void
+usart5_get_char	uart5.c	/^uint8_t usart5_get_char(void)$/;"	f	typeref:typename:uint8_t
+usart5_gpio_configure	uart5.c	/^void usart5_gpio_configure(void)$/;"	f	typeref:typename:void
+usart5_gpio_disable	uart5.c	/^void usart5_gpio_disable(void)$/;"	f	typeref:typename:void
+usart5_init	uart5.c	/^void usart5_init(void)$/;"	f	typeref:typename:void
+usart5_put_tx	uart5.c	/^void usart5_put_tx(char s[], int l)$/;"	f	typeref:typename:void
+usart5_rx	uart5.c	/^uint8_t usart5_rx[USART5_RX_BUFFER];$/;"	v	typeref:typename:uint8_t[]
+usart5_tx	uart5.c	/^uint8_t usart5_tx[USART5_TX_BUFFER];$/;"	v	typeref:typename:uint8_t[]
+wait	wait.c	/^void wait(uint64_t ms)$/;"	f	typeref:typename:void
+wait_until	wait.c	/^void wait_until(uint64_t timestamp)$/;"	f	typeref:typename:void
+waitlength	lightcontrol.c	/^int waitlength;$/;"	v	typeref:typename:int
+white	ws2812b.h	/^	uint8_t white;$/;"	m	struct:__anonc89c36f40208	typeref:typename:uint8_t
