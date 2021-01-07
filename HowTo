@@ -1,0 +1,6 @@
+git clone ssh://git@tibersam.de:33991/home/git/ws2812.git
+cd ws2812
+git submodule init
+git submoduel update --remote
+cd libopencm3
+make 
