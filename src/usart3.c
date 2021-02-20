@@ -72,6 +72,10 @@ void usart3_enable(void)
 {
 	usart3_gpio_configure();
 	usart_enable(USART3);
+	if(tx_w_index != tx_r_index)
+	{
+		usart_enable_tx_interrupt(USART3);
+	}
 }
 void usart3_disable(void)
 {
