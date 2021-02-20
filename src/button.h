@@ -4,6 +4,10 @@
 
 void setup_gpio_button(void);
 
+int get_white(void);
+
+uint64_t get_white_tick(void);
+
 int get_button1(void);
 
 int get_button2(void);

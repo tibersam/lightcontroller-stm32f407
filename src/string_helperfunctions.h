@@ -52,4 +52,12 @@ long long int translate_number_format(char *s, int s_len, int max_char, int num_
  * @return value of translated char
  */
 uint8_t asciihex_to_int(char s);
+
+void char_to_asciihex(uint8_t bytes);
+
+void uint16_t_to_asciihex(uint16_t bytes);
+
+void uint32_t_to_asciihex(uint32_t bytes);
+
+void uint64_t_to_asciihex(uint64_t bytes);
 #endif

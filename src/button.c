@@ -10,12 +10,27 @@
 #include "button_consol.h"
 #include "wait.h"
 
+static int button1 = 0;
+static uint64_t button1_tick = 0;
+
+
 void setup_gpio_button(void)
 {
 	rcc_periph_clock_enable(RCC_GPIOE);
 	gpio_mode_setup(GPIOE, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, GPIO5|GPIO6);
 	gpio_mode_setup(GPIOE, GPIO_MODE_INPUT, GPIO_PUPD_NONE, GPIO2|GPIO4);
-	gpio_clear(GPIOE, GPIO5|GPIO6);	
+	gpio_clear(GPIOE, GPIO5|GPIO6);
+	button1 = 0;
+}
+
+int get_white(void)
+{
+	return button1;
+}
+
+uint64_t get_white_tick(void)
+{
+	return button1_tick;
 }
 
 int get_button1(void)
@@ -61,7 +76,7 @@ void clear_led_button2(void)
 
 void process_button1(void)
 {
-	static int button1 = 0;
+	int change = 0;
 	static int disablecounter = 0; 
 	if(disablecounter != 0)
 	{
@@ -85,6 +100,7 @@ void process_button1(void)
 	}
 	if(button1 != get_button1())
 	{
+		change = 1;
 		button1 = get_button1();
 		if(button1 == 1)
 		{
@@ -94,30 +110,39 @@ void process_button1(void)
 		{
 			clear_led_button1();
 		}
-		if((disablecounter == 0))
+	}
+	if((disablecounter == 0) && (change == 1))
+	{
+		if(get_atx_status() == 0)
 		{
-			if(get_atx_status() == 0)
+			if(button1 == 1)
 			{
-				if(button1 == 1)
-				{
-					enable_atx();
-					set_stepmode(1);
-					disablecounter = 261;
-					setrgbvalues(255,255,255);
-					print("[Button1]: pressed\n");
-				}
-			}
-			else
-			{
-				if(button1 == 0)
-				{
-					set_stepmode(0);
-					disablecounter = 1;
-					setrgbvalues(0,0,0);
-					print("[Button1]: pressed\n");
-				}
+				enable_atx();
+				set_stepmode(1);
+				disablecounter = 261;
+				setrgbvalues(255,255,255);
+				print("[Button1]: pressed\n");
 			}
 		}
+		else
+		{
+			if(button1 == 0 && get_tick() - button1_tick < 1000)
+			{
+				float hue;
+				float sat;
+				float intens;
+				get_hsi( &hue, &sat, &intens);
+				intens = 0.0;
+				set_stepmode(0);
+				disablecounter = 1;
+				setcycelhsi( hue, sat, intens, 256);
+				print("[Button1]: pressed\n");
+			}
+		}
+	}
+	if(change == 1)
+	{
+		button1_tick = get_tick();
 	}
 }
 

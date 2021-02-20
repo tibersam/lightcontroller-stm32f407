@@ -3,6 +3,8 @@
 #include "string_helperfunctions.h"
 #include "wait.h"
 #include "lightcontrol.h"
+#include "ws2812b.h"
+#include "button.h"
 
 #define RED 0
 #define GREEN 1
@@ -25,6 +27,146 @@ uint8_t detect_collour(char *s, int len);
 void button_decode_update(char *s, int len);
 
 void button_decode_time(char *s, int len);
+
+void calculate_target(uint8_t *rout, uint8_t *gout, uint8_t *bout, uint8_t *hout, uint8_t *wout);
+
+void calculate_target(uint8_t *rout, uint8_t *gout, uint8_t *bout, uint8_t *hout, uint8_t *wout)
+{
+		uint8_t tmpr = 0;
+		uint8_t tmpb = 0;
+		uint8_t tmpg = 0;
+		uint8_t tmph = 0;
+		uint8_t tmpw = 0;
+		uint64_t tick = get_tick();
+		if(tick - tr >= 1000 && r == 1)
+			tmpr = 255;
+		if(tick - tg >= 1000 && g == 1)
+			tmpg = 255;
+		if(tick - tb >= 1000 && b == 1)
+			tmpb = 255;
+		if(tick - ty >= 1000 && y == 1)
+			tmph = 255;
+		if(tick - get_white_tick() >= 1000 && get_white() == 1)
+			tmpw = 255;
+		*rout = tmpr;
+		*gout = tmpg;
+		*bout = tmpb;
+		*hout = tmph;
+		*wout = tmpw;
+}
+
+void check_buttons(void)
+{
+	static uint32_t tick = 1;
+	uint8_t tmpr = 0;
+	uint8_t tmpg = 0;
+	uint8_t tmpb = 0;
+	uint8_t tmph = 0;
+	uint8_t tmpw = 0;
+	static uint8_t red_c = 0;
+	static uint8_t green_c = 0;
+	static uint8_t blue_c = 0;
+	static uint8_t yellow_h = 0;
+	static uint8_t white_i = 0;
+	static float old_hue = 0.0;
+	static float old_sat = 1.0;
+	static float old_int = 1.0;
+	static uint8_t stop = 0;
+	static int stepmode = 1;
+	calculate_target(&tmpr, &tmpg, &tmpb, &tmph, &tmpw);
+	if(tmpr != red_c)
+	{
+		if(tmpr == 0)
+		{
+			stop = 1;
+		}
+		tick = 0;
+		red_c = tmpr;
+	}
+	if(tmpg != green_c)
+	{
+		if(tmpg == 0)
+		{
+			stop = 1;
+		}
+		tick = 0;
+		green_c = tmpg;
+	}
+	if(tmpb != blue_c)
+	{
+		if(tmpb == 0)
+		{
+			stop = 1;
+		}
+		tick = 0;
+		blue_c = tmpb;
+	}
+	if(tmph != yellow_h)
+	{
+		if(tmph == 0)
+		{
+			stop = 1;
+		}
+		tick = 0;
+		yellow_h = tmph;
+	}
+	if(tmpw != white_i)
+	{
+		if(tmpw == 0)
+		{
+			stop = 1;
+		}
+		tick = 0;
+		white_i = tmpw;
+	}
+	//Detetected a change?
+	if((tick == 0) && (red_c != 0 || green_c != 0 || blue_c != 0 || yellow_h != 0 || white_i != 0))
+	{
+		get_hsi(&old_hue, &old_sat, & old_int);
+		float target_hue = old_hue;
+		float target_sat = old_sat;
+		float target_int = old_int;
+		//change target_vector
+		if(red_c != 0 || green_c != 0 || blue_c != 0)
+		{
+			rgbtohsi(red_c, green_c, blue_c, &target_hue, &target_sat, &target_int);
+		}
+		if(yellow_h != 0)
+		{
+			target_sat = 0.0;
+		}
+		if(white_i != 0)
+		{
+			target_int = 0.0;
+		}
+		set_stepmode(0);
+		setcycelhsi( target_hue, target_sat, target_int, 256);
+	}
+	//return point back to old value
+	if(tick == 300)
+	{
+		setcycelhsi( old_hue, old_sat, old_int, 256);
+	}
+	//check if we need to increase tick. Rest stops, if not needed 
+	if(red_c != 0 || green_c != 0 || blue_c != 0 || yellow_h != 0 || white_i != 0)
+	{
+		tick = (tick + 1) % 600;
+		stop = 0;
+	}
+	else 
+	{
+		tick = 1;
+		if(stop == 1)
+		{
+			get_hsi(&old_hue, &old_sat, & old_int);
+			setcycelhsi( old_hue, old_sat, old_int, 255);
+			stop = 0;
+			set_stepmode(stepmode);
+		}
+		stepmode = get_stepmode();
+	}
+}
+
 
 
 void button_test(void)
@@ -214,13 +356,13 @@ void button_decode_time(char *s, int len)
 		uint8_t tmpb = 0;
 		uint8_t tmpg = 0;
 		uint64_t tick = get_tick();
-		if(tick - tr < 500 && r == 0)
+		if(tick - tr < 1000 && r == 0)
 			tmpr = 255;
-		if(tick - tg < 500 && g == 0)
+		if(tick - tg < 1000 && g == 0)
 			tmpg = 255;
-		if(tick - tb < 500 && b == 0)
+		if(tick - tb < 1000 && b == 0)
 			tmpb = 255;
-		if(tick - ty < 500 && y == 0)
+		if(tick - ty < 1000 && y == 0)
 		{
 			if(tmpr == 0)
 				tmpr = 100;
@@ -228,7 +370,7 @@ void button_decode_time(char *s, int len)
 				tmpg = 100;
 			if(tmpb == 0)
 				tmpb = 100;
-			if((tmpr == 100) && (tmpg == 100) && (tmpb == 100))
+			if((tmpr != 255) && (tmpg != 255) && (tmpb != 255))
 			{
 				tmpr = 255;
 				tmpg = 255;
@@ -236,6 +378,13 @@ void button_decode_time(char *s, int len)
 			}
 		}
 		setrgbvalues(tmpr, tmpg, tmpb);
+		print("[update colour] 0x");
+		char_to_asciihex(tmpr);
+		print(" | 0x");
+		char_to_asciihex(tmpg);
+		print(" | 0x");
+		char_to_asciihex(tmpb);
+		print("\n");
 	}
 
 }

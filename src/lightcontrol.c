@@ -26,11 +26,57 @@ int set_stepmode(int step)
 	}
 }
 
+int get_stepmode(void)
+{
+	return stepmode;
+}
+
 void set_waitlength(int wait)
 {
 	waitlength = wait;
 }
 
+
+void get_hsi(float *hue, float *sat, float *intens)
+{
+	*hue = lights[60].current_hue;
+	*sat = lights[60].current_sat;
+	*intens = lights[60].current_int;
+}
+
+void setcycelhsi(float hue, float sat, float intens, float interval)
+{
+  int i = 0;
+  float value1;
+  float value2;
+  float target_hue = hue;
+  float target_sat = sat;
+  float target_int = intens;
+  //rgbtohsi((uint8_t)red,(uint8_t) green,(uint8_t) blue, &target_hue, &target_sat, &target_int );
+   for(i = 0; i < NUMBERLED; i++)
+   {
+     value1 = target_hue - lights[i].current_hue;
+     if(value1 >= 180.0 )
+     {
+       value2 = (value1 - 360.0);
+     }
+     else
+     {
+       if(value1 <= -180)
+       {
+         value2 = 360 + value1;
+       }
+       else
+       {
+         value2 = value1;
+       }
+     }
+     lights[i].step_hue = value2/interval;
+     lights[i].step_sat = ((target_sat - lights[i].current_sat)/interval);
+     lights[i].step_int = ((target_int - lights[i].current_int)/interval);
+   }
+   setstepspeed();
+}
 
 void setrgbvalues(int red, int green, int blue)
 {

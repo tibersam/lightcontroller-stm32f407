@@ -170,7 +170,7 @@ long long int translate_dec_format(char *s, int s_len, int max_char)
 		z = asciihex_to_int(*(tmp-i));
 		if ((z == 0xff) || (z > 9))
 		{
-			print("[ERROR]: Invalid character for decimal number");
+			print("[ERROR]: Invalid character for decimal number\n");
 			return -1;
 		}
 		ret = ret + ((long long int) z) * pot(10,i);
@@ -285,4 +285,43 @@ uint8_t asciihex_to_int(char s)
 			break;
 	}
 	return value;
+}
+
+void char_to_asciihex(uint8_t bytes)
+{
+	char array[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+	char out[3];
+	out[2] = 0;
+	out[0] = array[bytes >> 4];
+	bytes = bytes & 0xf;
+	out[1] = array[bytes];
+	print(out);
+}
+
+void uint16_t_to_asciihex(uint16_t bytes)
+{
+	uint16_t tmp = bytes;
+	tmp = tmp & 0xFF00;
+	tmp = tmp >> 8;
+	char_to_asciihex((uint8_t)tmp);
+	bytes = bytes & 0xFF;
+	char_to_asciihex((uint8_t) bytes);
+}
+
+void uint32_t_to_asciihex(uint32_t bytes)
+{
+	uint32_t tmp = bytes & 0xFFFF0000;
+	tmp = tmp >> 16;
+	uint16_t_to_asciihex((uint16_t)tmp);
+	bytes = bytes & 0xFFFF;
+	uint16_t_to_asciihex((uint16_t) bytes);
+}
+
+void uint64_t_to_asciihex(uint64_t bytes)
+{
+	uint64_t tmp = bytes & 0xFFFFFFFF00000000;
+	tmp = tmp >> 32;
+	uint32_t_to_asciihex((uint32_t)tmp);
+	bytes = bytes & 0xFFFFFFFF;
+	uint32_t_to_asciihex((uint32_t) bytes);
 }

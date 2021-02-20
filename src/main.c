@@ -44,6 +44,7 @@ void init(void)
 	usart1_init();
 	consol_init();
 	setup_gpio_button();
+	button_decoder_init();
 }
 
 int main(void)
@@ -90,6 +91,9 @@ int main(void)
 	print("[READY] Selftest complete\n");
 	print("Enable Consol\n");
 	uint64_t last_tick = get_tick();
+	check_uart();
+	check_buttons();
+	set_stepmode(1);
 	setrgbvalues(255, 255, 255);
 	int j = 0;
 	while(1 == 1)
@@ -100,13 +104,14 @@ int main(void)
 			sendbuffer();
 			calculatestep();
 			preparebuffer();
+			check_buttons();
 		}
 		gpio_toggle(GPIOA, GPIO6|GPIO7);
 		check_uart();
 		process_button();
 		if(get_atx_status() == 0)
 		{
-			wait_until(last_tick + 1000);
+			wait_until(last_tick + 500);
 		}
 		wait_until(last_tick + 20);
 	}
