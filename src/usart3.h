@@ -2,7 +2,7 @@
 #define USART3_TX_RX_RINGBUFFER
 
 #define USART3_TX_BUFFER 100
-#define USART3_RX_BUFFER 50
+#define USART3_RX_BUFFER 150
 
 
 #include <stdint.h>
