@@ -12,6 +12,7 @@
 #include "button.h"
 #include "usart1.h"
 #include "usart3.h"
+#include "button_consol.h"
 
 void init(void);
 
@@ -22,7 +23,7 @@ static void clock_setup(void)
 	gpio_clear(GPIOA, GPIO6|GPIO7);
 	gpio_set(GPIOA, GPIO6);
 
-	
+
 
 	gpio_clear(GPIOA, GPIO6);
 
@@ -65,13 +66,15 @@ int main(void)
 	}
 	i = 0;
 	enable_atx();
-	usart3_put_tx("TEST\r\n", 6);
 	print("Welcome to Lightcontroller Version 2.0\n");
 	print("Testing ATX\n");
+	print("Testing Buttons\n");
+	button_test();
 	gpio_set(GPIOA, GPIO6);
 	gpio_clear(GPIOA, GPIO7);
 	for(i = 0; i < 6; i++)
 	{
+		check_uart();
 		wait(500);
 		gpio_toggle(GPIOA, GPIO6|GPIO7);
 	}
@@ -91,81 +94,21 @@ int main(void)
 	int j = 0;
 	while(1 == 1)
 	{
-	/*	switch(j)
+		last_tick = get_tick();
+		if(get_atx_status() == 1)
 		{
-		case 0:
-			setrgbvalues(255,0,0);
-			break;
-		case 1:
-			setrgbvalues(0,255,0);
-			break;
-		case 2:
-			setrgbvalues(0,0,255);
-			break;
-		case 3:
-			setrgbvalues(255,255,255);
-			break;
-		case 4:
-			setrgbvalues(255,128,128);
-			break;
-		case 5:
-			setrgbvalues(64,0,64);
-			break;
-		case 6:
-			setrgbvalues(128,128,64);
-			break;
-		case 7:
-			setrgbvalues(2,200,150);
-			break;
-		case 8:
-			setrgbvalues(10,60,50);
-			break;
-		case 9:
-			setrgbvalues(127, 43, 183);
-			break;
-		case 10:
-			setrgbvalues(12,210,111);
-			break;
-		case 11:
-			setrgbvalues(236,255,107);
-			break;
-		case 12:
-			setrgbvalues(1,1,1);
-			break;
-		case 13:
-			setrgbvalues(30,0,30);
-			break;
-		case 14:
-			setrgbvalues(0,0,0);
-			break;
-		default:
-			j = 100;
-			break;
+			sendbuffer();
+			calculatestep();
+			preparebuffer();
 		}
-		if(j == 100)
+		gpio_toggle(GPIOA, GPIO6|GPIO7);
+		check_uart();
+		process_button();
+		if(get_atx_status() == 0)
 		{
-			break;
+			wait_until(last_tick + 1000);
 		}
-		j++;*/
-		//for(i = 0; i < 1850; i++)
-		//{
-			last_tick = get_tick();
-			if(get_atx_status() == 1)
-			{
-				sendbuffer();
-				calculatestep();
-				preparebuffer();
-			}
-			gpio_toggle(GPIOA, GPIO6|GPIO7);
-			check_uart();
-			process_button();
-			if(get_atx_status() == 0)
-			{
-				wait_until(last_tick + 1000);
-			}
-			wait_until(last_tick + 20);
-			//usart5_put_tx("asdf\r",5);
-		//}
+		wait_until(last_tick + 20);
 	}
 	disable_atx();
 	gpio_set(GPIOA, GPIO6);

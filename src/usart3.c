@@ -36,7 +36,7 @@ void usart3_init(void)
 	/* Enable the USART3 interrupt. */
 	nvic_enable_irq(NVIC_USART3_IRQ);
  
-	/*enable clocks for USART5*/
+	/*enable clocks for USART3*/
 	rcc_periph_clock_enable(RCC_USART3);
 	rcc_periph_clock_enable(RCC_GPIOB);
 
@@ -56,7 +56,7 @@ void usart3_init(void)
 	rx_w_index = 0;
 
 
-	/*Setup USART5*/
+	/*Setup USART3*/
         usart_set_baudrate(USART3, 115200);
         usart_set_databits(USART3, 8);
         usart_set_stopbits(USART3, USART_STOPBITS_1);

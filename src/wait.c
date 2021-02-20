@@ -1,5 +1,6 @@
 
 #include "wait.h"
+#include "consol.h"
 
 volatile uint64_t tick;
 

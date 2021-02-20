@@ -3,6 +3,7 @@
 #include "decoder.h"
 #include "usart1.h"
 #include "usart3.h"
+#include "button_consol.h"
 
 uint8_t uart5_buffer[UART5_BUFFER];
 uint32_t uart5_level; 
@@ -19,7 +20,6 @@ uint8_t usart3_echo;
 uint8_t usart3_consol;
 
 void check_uart5(void);
-void check_usart3(void);
 void check_usart1(void);
 void clearup_consol(void);
 
@@ -139,11 +139,11 @@ void check_usart3(void)
 	while(usart3_calc_rx_level() != 0)
 	{
 		usart3_buffer[usart3_level] = usart3_get_char();
-		if(usart3_buffer[usart3_level]  == 'r')
+		if(usart3_buffer[usart3_level]  == '\r' || usart3_buffer[usart3_level] == '\n')
 		{
 			usart3_buffer[usart3_level] = 0;
 		//	usart3_put_tx((char *)usart3_buffer, usart3_level);
-			//TODO Place Button message decoding here
+			button_decoder((char *)usart3_buffer, usart3_level);
 			usart3_level = 0;
 		}
 		else
@@ -245,6 +245,19 @@ void consol_puts(char *s)
 			usart1_put_tx("\r", 1);
 			if(uart5_consol == 1)
 				usart5_put_tx("\r",1);
+		}
+		s++;
+	}
+}
+
+void button_box_puts(char *s)
+{
+	while( *s != '\000')
+	{
+		usart3_put_tx(s, 1);
+		if(*s == '\n')
+		{
+			usart3_put_tx("\r", 1);
 		}
 		s++;
 	}

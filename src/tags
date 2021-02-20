@@ -6,6 +6,8 @@
 !_TAG_PROGRAM_URL	https://ctags.io/	/official site/
 !_TAG_PROGRAM_VERSION	0.0.0	//
 ATXCONTROLLER	atx.h	/^#define ATXCONTROLLER$/;"	d
+BUTTON_CONSOL_H	button_consol.h	/^#define BUTTON_CONSOL_H$/;"	d
+BUTTON_HEADER	button.h	/^#define BUTTON_HEADER$/;"	d
 CONSOL_H	consol.h	/^#define CONSOL_H$/;"	d
 DECODER	decoder.h	/^#define DECODER$/;"	d
 LED	ws2812b.h	/^}LED;$/;"	t	typeref:struct:__anonc89c36f40108
@@ -31,6 +33,14 @@ OFFSETSPI4	ws2812b.h	/^	#define OFFSETSPI4 /;"	d
 SK2812SPI	ws2812b.h	/^#define SK2812SPI$/;"	d
 STRING_HELPERFUNCTIONS	string_helperfunctions.h	/^#define STRING_HELPERFUNCTIONS$/;"	d
 UART5_BUFFER	consol.h	/^#define UART5_BUFFER /;"	d
+USART1_BUFFER	consol.h	/^#define USART1_BUFFER /;"	d
+USART1_RX_BUFFER	usart1.h	/^#define USART1_RX_BUFFER /;"	d
+USART1_TX_BUFFER	usart1.h	/^#define USART1_TX_BUFFER /;"	d
+USART1_TX_RX_RINGBUFFER	usart1.h	/^#define USART1_TX_RX_RINGBUFFER$/;"	d
+USART3_BUFFER	consol.h	/^#define USART3_BUFFER /;"	d
+USART3_RX_BUFFER	usart3.h	/^#define USART3_RX_BUFFER /;"	d
+USART3_TX_BUFFER	usart3.h	/^#define USART3_TX_BUFFER /;"	d
+USART3_TX_RX_RINGBUFFER	usart3.h	/^#define USART3_TX_RX_RINGBUFFER$/;"	d
 USART5_RX_BUFFER	uart5.h	/^#define USART5_RX_BUFFER /;"	d
 USART5_TX_BUFFER	uart5.h	/^#define USART5_TX_BUFFER /;"	d
 USART5_TX_RX_RINGBUFFER	uart5.h	/^#define USART5_TX_RX_RINGBUFFER$/;"	d
@@ -44,9 +54,17 @@ asciihex_to_int	string_helperfunctions.c	/^uint8_t asciihex_to_int(char s)$/;"	f
 asciinum_to_int_flex	string_helperfunctions.c	/^long long int asciinum_to_int_flex(char *s, int s_len, int num_bytes)$/;"	f	typeref:typename:long long int
 blue	ws2812b.h	/^	uint8_t blue;$/;"	m	struct:__anonc89c36f40108	typeref:typename:uint8_t
 blue	ws2812b.h	/^	uint8_t blue;$/;"	m	struct:__anonc89c36f40208	typeref:typename:uint8_t
+button_box_puts	consol.c	/^void button_box_puts(char *s)$/;"	f	typeref:typename:void
+button_decoder	button_consol.c	/^void button_decoder(char *s, int len)$/;"	f	typeref:typename:void
+button_test	button_consol.c	/^void button_test(void)$/;"	f	typeref:typename:void
 calculatestep	lightcontrol.c	/^void calculatestep(void)$/;"	f	typeref:typename:void
 check_uart	consol.c	/^void check_uart(void)$/;"	f	typeref:typename:void
 check_uart5	consol.c	/^void check_uart5(void)$/;"	f	typeref:typename:void
+check_usart1	consol.c	/^void check_usart1(void)$/;"	f	typeref:typename:void
+check_usart3	consol.c	/^void check_usart3(void)$/;"	f	typeref:typename:void
+clear_led_button1	button.c	/^void clear_led_button1(void)$/;"	f	typeref:typename:void
+clear_led_button2	button.c	/^void clear_led_button2(void)$/;"	f	typeref:typename:void
+clearup_consol	consol.c	/^void clearup_consol(void)$/;"	f	typeref:typename:void
 clock_setup	main.c	/^static void clock_setup(void)$/;"	f	typeref:typename:void	file:
 consol_init	consol.c	/^void consol_init(void)$/;"	f	typeref:typename:void
 consol_puts	consol.c	/^void consol_puts(char *s)$/;"	f	typeref:typename:void
@@ -55,10 +73,16 @@ current_int	ws2812b.h	/^	float current_int;$/;"	m	struct:__anonc89c36f40208	type
 current_sat	ws2812b.h	/^	float current_sat;$/;"	m	struct:__anonc89c36f40208	typeref:typename:float
 decoder	decoder.c	/^void decoder(char *s, int len)$/;"	f	typeref:typename:void
 disable_atx	atx.c	/^void disable_atx(void)$/;"	f	typeref:typename:void
+disable_uart5_consol	consol.c	/^void disable_uart5_consol(void)$/;"	f	typeref:typename:void
 enable_atx	atx.c	/^void enable_atx(void)$/;"	f	typeref:typename:void
 enable_send_spi2	ws2812b.c	/^	int enable_send_spi2 = 0;  $/;"	v	typeref:typename:int
 enable_send_spi3	ws2812b.c	/^	int enable_send_spi3 = 0;$/;"	v	typeref:typename:int
+enable_uart5_consol	consol.c	/^void enable_uart5_consol(void)$/;"	f	typeref:typename:void
 find_next_argument	string_helperfunctions.c	/^int find_next_argument(char *s, int s_length)$/;"	f	typeref:typename:int
+get_atx_status	atx.c	/^int get_atx_status(void)$/;"	f	typeref:typename:int
+get_button1	button.c	/^int get_button1(void)$/;"	f	typeref:typename:int
+get_button2	button.c	/^int get_button2(void)$/;"	f	typeref:typename:int
+get_number	decoder.c	/^long long int get_number(char **s, int *len)$/;"	f	typeref:typename:long long int
 get_tick	wait.c	/^uint64_t get_tick(void)$/;"	f	typeref:typename:uint64_t
 green	ws2812b.h	/^	uint8_t green;$/;"	m	struct:__anonc89c36f40108	typeref:typename:uint8_t
 green	ws2812b.h	/^	uint8_t green;$/;"	m	struct:__anonc89c36f40208	typeref:typename:uint8_t
@@ -77,12 +101,28 @@ myround	ws2812b.c	/^uint8_t myround (float x)$/;"	f	typeref:typename:uint8_t
 pot	string_helperfunctions.c	/^int pot(int base, int exponent)$/;"	f	typeref:typename:int
 preparebuffer	ws2812b.c	/^void preparebuffer(void)$/;"	f	typeref:typename:void
 print	consol.c	/^void print(char *s)$/;"	f	typeref:typename:void
+process_button	button.c	/^void process_button(void)$/;"	f	typeref:typename:void
+process_button1	button.c	/^void process_button1(void)$/;"	f	typeref:typename:void
+process_echo	decoder.c	/^void process_echo(char *s, int len)$/;"	f	typeref:typename:void
 process_set	decoder.c	/^void process_set(char *s, int len)$/;"	f	typeref:typename:void
+process_setlimitrgb	decoder.c	/^void process_setlimitrgb(char *s, int len)$/;"	f	typeref:typename:void
+process_status	decoder.c	/^void process_status(void)$/;"	f	typeref:typename:void
+process_uart5	decoder.c	/^void process_uart5(char *s, int len)$/;"	f	typeref:typename:void
 red	ws2812b.h	/^	uint8_t red;$/;"	m	struct:__anonc89c36f40108	typeref:typename:uint8_t
 red	ws2812b.h	/^	uint8_t red;$/;"	m	struct:__anonc89c36f40208	typeref:typename:uint8_t
-rx_r_index	uart5.c	/^volatile uint32_t rx_r_index;$/;"	v	typeref:typename:volatile uint32_t
-rx_w_index	uart5.c	/^volatile uint32_t rx_w_index;$/;"	v	typeref:typename:volatile uint32_t
+rx_r_index	uart5.c	/^static volatile uint32_t rx_r_index;$/;"	v	typeref:typename:volatile uint32_t	file:
+rx_r_index	usart1.c	/^static volatile uint32_t rx_r_index;$/;"	v	typeref:typename:volatile uint32_t	file:
+rx_r_index	usart3.c	/^static volatile uint32_t rx_r_index;$/;"	v	typeref:typename:volatile uint32_t	file:
+rx_w_index	uart5.c	/^static volatile uint32_t rx_w_index;$/;"	v	typeref:typename:volatile uint32_t	file:
+rx_w_index	usart1.c	/^static volatile uint32_t rx_w_index;$/;"	v	typeref:typename:volatile uint32_t	file:
+rx_w_index	usart3.c	/^static volatile uint32_t rx_w_index;$/;"	v	typeref:typename:volatile uint32_t	file:
+set_atx	decoder.c	/^void set_atx(char *s, int len)$/;"	f	typeref:typename:void
+set_echo	consol.c	/^void set_echo(int echo)$/;"	f	typeref:typename:void
+set_led_button1	button.c	/^void set_led_button1(void)$/;"	f	typeref:typename:void
+set_led_button2	button.c	/^void set_led_button2(void)$/;"	f	typeref:typename:void
 set_stepmode	lightcontrol.c	/^int set_stepmode(int step)$/;"	f	typeref:typename:int
+set_stepnumber	decoder.c	/^void set_stepnumber(char *s, int len)$/;"	f	typeref:typename:void
+set_waitlength	lightcontrol.c	/^void set_waitlength(int wait)$/;"	f	typeref:typename:void
 sethsivalues	lightcontrol.c	/^void sethsivalues(int hue, int saturation, int intensity)$/;"	f	typeref:typename:void
 setlimitrgb	lightcontrol.c	/^void setlimitrgb(int red, int green, int blue, int offset, int length, int mode)$/;"	f	typeref:typename:void
 setmode	decoder.c	/^void setmode(char *s, int len)$/;"	f	typeref:typename:void
@@ -90,6 +130,7 @@ setrgb	decoder.c	/^void setrgb(char *s, int len)$/;"	f	typeref:typename:void
 setrgbvalues	lightcontrol.c	/^void setrgbvalues(int red, int green, int blue)$/;"	f	typeref:typename:void
 setstepspeed	lightcontrol.c	/^void setstepspeed(void)$/;"	f	typeref:typename:void
 setup_gpio_atx	atx.c	/^void setup_gpio_atx(void)$/;"	f	typeref:typename:void
+setup_gpio_button	button.c	/^void setup_gpio_button(void)$/;"	f	typeref:typename:void
 setupdma	ws2812b.c	/^void setupdma(uint32_t dma, uint8_t stream, uint32_t channel, uint32_t spi_address, uint32_t off/;"	f	typeref:typename:void
 setuplightcontroller	lightcontrol.c	/^void setuplightcontroller(void)$/;"	f	typeref:typename:void
 setupmoduleclock	ws2812b.c	/^void setupmoduleclock(void)$/;"	f	typeref:typename:void
@@ -104,13 +145,47 @@ t	ws2812b.h	/^	int t;$/;"	m	struct:__anonc89c36f40208	typeref:typename:int
 tick	wait.c	/^volatile uint64_t tick;$/;"	v	typeref:typename:volatile uint64_t
 translate_dec_format	string_helperfunctions.c	/^long long int translate_dec_format(char *s, int s_len, int max_char)$/;"	f	typeref:typename:long long int
 translate_number_format	string_helperfunctions.c	/^long long int translate_number_format(char *s, int s_len, int max_char, int num_bit_coding)$/;"	f	typeref:typename:long long int
-tx_r_index	uart5.c	/^volatile uint32_t tx_r_index;$/;"	v	typeref:typename:volatile uint32_t
-tx_w_index	uart5.c	/^volatile uint32_t tx_w_index;$/;"	v	typeref:typename:volatile uint32_t
+tx_r_index	uart5.c	/^static volatile uint32_t tx_r_index;$/;"	v	typeref:typename:volatile uint32_t	file:
+tx_r_index	usart1.c	/^static volatile uint32_t tx_r_index;$/;"	v	typeref:typename:volatile uint32_t	file:
+tx_r_index	usart3.c	/^static volatile uint32_t tx_r_index;$/;"	v	typeref:typename:volatile uint32_t	file:
+tx_w_index	uart5.c	/^static volatile uint32_t tx_w_index;$/;"	v	typeref:typename:volatile uint32_t	file:
+tx_w_index	usart1.c	/^static volatile uint32_t tx_w_index;$/;"	v	typeref:typename:volatile uint32_t	file:
+tx_w_index	usart3.c	/^static volatile uint32_t tx_w_index;$/;"	v	typeref:typename:volatile uint32_t	file:
 uart5_buffer	consol.c	/^uint8_t uart5_buffer[UART5_BUFFER];$/;"	v	typeref:typename:uint8_t[]
 uart5_calc_rx_level	uart5.c	/^unsigned int uart5_calc_rx_level(void)$/;"	f	typeref:typename:unsigned int
+uart5_consol	consol.c	/^uint8_t uart5_consol;$/;"	v	typeref:typename:uint8_t
 uart5_echo	consol.c	/^uint8_t uart5_echo;$/;"	v	typeref:typename:uint8_t
 uart5_isr	uart5.c	/^void uart5_isr(void)$/;"	f	typeref:typename:void
 uart5_level	consol.c	/^uint32_t uart5_level; $/;"	v	typeref:typename:uint32_t
+usart1_buffer	consol.c	/^uint8_t usart1_buffer[USART1_BUFFER];$/;"	v	typeref:typename:uint8_t[]
+usart1_calc_rx_level	usart1.c	/^unsigned int usart1_calc_rx_level(void)$/;"	f	typeref:typename:unsigned int
+usart1_disable	usart1.c	/^void usart1_disable(void)$/;"	f	typeref:typename:void
+usart1_echo	consol.c	/^uint8_t usart1_echo;$/;"	v	typeref:typename:uint8_t
+usart1_enable	usart1.c	/^void usart1_enable(void)$/;"	f	typeref:typename:void
+usart1_get_char	usart1.c	/^uint8_t usart1_get_char(void)$/;"	f	typeref:typename:uint8_t
+usart1_gpio_configure	usart1.c	/^void usart1_gpio_configure(void)$/;"	f	typeref:typename:void
+usart1_gpio_disable	usart1.c	/^void usart1_gpio_disable(void)$/;"	f	typeref:typename:void
+usart1_init	usart1.c	/^void usart1_init(void)$/;"	f	typeref:typename:void
+usart1_isr	usart1.c	/^void usart1_isr(void)$/;"	f	typeref:typename:void
+usart1_level	consol.c	/^uint32_t usart1_level;$/;"	v	typeref:typename:uint32_t
+usart1_put_tx	usart1.c	/^void usart1_put_tx(char s[], int l)$/;"	f	typeref:typename:void
+usart1_rx	usart1.c	/^uint8_t usart1_rx[USART1_RX_BUFFER];$/;"	v	typeref:typename:uint8_t[]
+usart1_tx	usart1.c	/^uint8_t usart1_tx[USART1_TX_BUFFER];$/;"	v	typeref:typename:uint8_t[]
+usart3_buffer	consol.c	/^uint8_t usart3_buffer[USART3_BUFFER];$/;"	v	typeref:typename:uint8_t[]
+usart3_calc_rx_level	usart3.c	/^unsigned int usart3_calc_rx_level(void)$/;"	f	typeref:typename:unsigned int
+usart3_consol	consol.c	/^uint8_t usart3_consol;$/;"	v	typeref:typename:uint8_t
+usart3_disable	usart3.c	/^void usart3_disable(void)$/;"	f	typeref:typename:void
+usart3_echo	consol.c	/^uint8_t usart3_echo;$/;"	v	typeref:typename:uint8_t
+usart3_enable	usart3.c	/^void usart3_enable(void)$/;"	f	typeref:typename:void
+usart3_get_char	usart3.c	/^uint8_t usart3_get_char(void)$/;"	f	typeref:typename:uint8_t
+usart3_gpio_configure	usart3.c	/^void usart3_gpio_configure(void)$/;"	f	typeref:typename:void
+usart3_gpio_disable	usart3.c	/^void usart3_gpio_disable(void)$/;"	f	typeref:typename:void
+usart3_init	usart3.c	/^void usart3_init(void)$/;"	f	typeref:typename:void
+usart3_isr	usart3.c	/^void usart3_isr(void)$/;"	f	typeref:typename:void
+usart3_level	consol.c	/^uint32_t usart3_level;$/;"	v	typeref:typename:uint32_t
+usart3_put_tx	usart3.c	/^void usart3_put_tx(char s[], int l)$/;"	f	typeref:typename:void
+usart3_rx	usart3.c	/^uint8_t usart3_rx[USART3_RX_BUFFER];$/;"	v	typeref:typename:uint8_t[]
+usart3_tx	usart3.c	/^uint8_t usart3_tx[USART3_TX_BUFFER];$/;"	v	typeref:typename:uint8_t[]
 usart5_disable	uart5.c	/^void usart5_disable(void)$/;"	f	typeref:typename:void
 usart5_enable	uart5.c	/^void usart5_enable(void)$/;"	f	typeref:typename:void
 usart5_get_char	uart5.c	/^uint8_t usart5_get_char(void)$/;"	f	typeref:typename:uint8_t

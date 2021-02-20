@@ -23,6 +23,7 @@ void disable_uart5_consol(void);
  * get characters from ringbuffers, serch for \r
  */
 void check_uart(void);
+void check_usart3(void);
 
 /*
  * consol_puts
@@ -30,6 +31,8 @@ void check_uart(void);
  * send string over uart5
  */
 void consol_puts(char *s);
+
+void button_box_puts(char *s);
 
 /*
  * print
