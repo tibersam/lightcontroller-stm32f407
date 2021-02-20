@@ -7,6 +7,8 @@
 #include "atx.h"
 #include "lightcontrol.h"
 #include "consol.h"
+#include "button_consol.h"
+#include "wait.h"
 
 void setup_gpio_button(void)
 {
@@ -37,11 +39,14 @@ int get_button2(void)
 void set_led_button1(void)
 {
 	gpio_set(GPIOE, GPIO5);
+	button_box_puts("set white 1\n");
+
 }
 
 void clear_led_button1(void)
 {
 	gpio_clear(GPIOE, GPIO5);
+	button_box_puts("set white 0\n");
 }
 
 void set_led_button2(void)
@@ -63,36 +68,55 @@ void process_button1(void)
 		disablecounter++;
 		if(disablecounter == 260)
 		{
+			clear_led_button1();
+			wait(2);
 			disable_atx();
 			disablecounter = 0;
-			clear_led_button1();
 		}
 		if(disablecounter == 300)
 		{
 			disablecounter = 0;
 			clear_led_button1();
 		}
+		if((disablecounter == 2) || (disablecounter == 280))
+		{
+			set_led_button1();
+		}
 	}
 	if(button1 != get_button1())
 	{
 		button1 = get_button1();
-		if((button1 == 1)&&(disablecounter == 0))
+		if(button1 == 1)
+		{
+			set_led_button1();
+		}	
+		else
+		{
+			clear_led_button1();
+		}
+		if((disablecounter == 0))
 		{
 			if(get_atx_status() == 0)
 			{
-				enable_atx();
-				set_stepmode(1);
-				disablecounter = 261;
-				setrgbvalues(255,255,255);
+				if(button1 == 1)
+				{
+					enable_atx();
+					set_stepmode(1);
+					disablecounter = 261;
+					setrgbvalues(255,255,255);
+					print("[Button1]: pressed\n");
+				}
 			}
 			else
 			{
-				set_stepmode(0);
-				disablecounter = 1;
-				setrgbvalues(0,0,0);
+				if(button1 == 0)
+				{
+					set_stepmode(0);
+					disablecounter = 1;
+					setrgbvalues(0,0,0);
+					print("[Button1]: pressed\n");
+				}
 			}
-			print("[Button1]: pressed\n");
-			set_led_button1();
 		}
 	}
 }
