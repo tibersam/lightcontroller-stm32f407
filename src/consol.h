@@ -3,6 +3,7 @@
 
 #define UART5_BUFFER 300
 #define USART1_BUFFER 300
+#define USART3_BUFFER 100
 
 /*
  * consol_init

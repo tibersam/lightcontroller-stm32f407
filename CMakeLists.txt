@@ -77,6 +77,8 @@ target_sources(ws2812.elf
     "src/button.h"
     "src/usart1.c"
     "src/usart1.h"
+    "src/usart3.c"
+    "src/usart3.h"
 )
 
 target_link_libraries(ws2812.elf opencm3_stm32f4 m)
@@ -86,7 +88,7 @@ set(BINARY ${TARGET}.bin)
 
 add_custom_target(flash 
 	COMMAND st-flash write ${BINARY} ${FLASH_START}
-	DEPENDS ${TARGET}.elf
+	DEPENDS ${TARGET}.bin
 	)
 
 
@@ -99,4 +101,4 @@ add_custom_target(debug
 	COMMAND ${DEBUGGER} -command ${CMAKE_CURRENT_LIST_DIR}/remote.gdbconf ${CMAKE_CURRENT_BINARY_DIR}/${TARGET}.elf 
 	DEPENDS ${TARGET}.elf
 	)
-add_dependencies(ws2812.elf libopencm3)
+add_dependencies(${TARGET}.bin libopencm3)

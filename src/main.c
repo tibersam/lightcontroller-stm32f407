@@ -11,6 +11,7 @@
 #include "consol.h"
 #include "button.h"
 #include "usart1.h"
+#include "usart3.h"
 
 void init(void);
 
@@ -38,6 +39,7 @@ void init(void)
 	setuplightcontroller();
 	setup_gpio_atx();
 	usart5_init();
+	usart3_init();
 	usart1_init();
 	consol_init();
 	setup_gpio_button();
@@ -63,6 +65,7 @@ int main(void)
 	}
 	i = 0;
 	enable_atx();
+	usart3_put_tx("TEST\r\n", 6);
 	print("Welcome to Lightcontroller Version 2.0\n");
 	print("Testing ATX\n");
 	gpio_set(GPIOA, GPIO6);

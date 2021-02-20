@@ -2,6 +2,7 @@
 #include "uart5.h"
 #include "decoder.h"
 #include "usart1.h"
+#include "usart3.h"
 
 uint8_t uart5_buffer[UART5_BUFFER];
 uint32_t uart5_level; 
@@ -12,7 +13,13 @@ uint8_t usart1_buffer[USART1_BUFFER];
 uint32_t usart1_level;
 uint8_t usart1_echo;
 
+uint8_t usart3_buffer[USART3_BUFFER];
+uint32_t usart3_level;
+uint8_t usart3_echo;
+uint8_t usart3_consol;
+
 void check_uart5(void);
+void check_usart3(void);
 void check_usart1(void);
 void clearup_consol(void);
 
@@ -31,6 +38,13 @@ void consol_init(void)
 	}
 	usart1_level = 0;
 	usart1_echo = 1;
+	for(int i = 0; i < USART3_BUFFER; i++)
+	{
+		usart3_buffer[i] = 0;
+	}
+	usart3_level = 0;
+	usart3_echo = 0;
+	usart3_consol = 0;
 }
 
 void set_echo(int echo)
@@ -62,6 +76,7 @@ void check_uart(void)
 		check_uart5();
 	}
 	check_usart1();
+	check_usart3();
 }
 
 void check_usart1(void)
@@ -116,6 +131,31 @@ void check_usart1(void)
 			}
 		}
 		usart1_buffer[usart1_level] = '\000';	
+	}
+}
+
+void check_usart3(void)
+{
+	while(usart3_calc_rx_level() != 0)
+	{
+		usart3_buffer[usart3_level] = usart3_get_char();
+		if(usart3_buffer[usart3_level]  == 'r')
+		{
+			usart3_buffer[usart3_level] = 0;
+		//	usart3_put_tx((char *)usart3_buffer, usart3_level);
+			//TODO Place Button message decoding here
+			usart3_level = 0;
+		}
+		else
+		{
+			usart3_level++;
+			if(usart3_level >= USART3_BUFFER - 1)
+			{
+				print("\n[ERROR]: USART3 Overflowed!\n");
+				usart3_level = 0;
+			}
+		}
+		usart3_buffer[usart3_level] = 0;
 	}
 }
 
