@@ -79,6 +79,8 @@ target_sources(ws2812.elf
     "src/usart1.h"
     "src/usart3.c"
     "src/usart3.h"
+    "src/button_consol.c"
+    "src/button_consol.h"
 )
 
 target_link_libraries(ws2812.elf opencm3_stm32f4 m)
