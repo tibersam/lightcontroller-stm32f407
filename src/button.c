@@ -77,7 +77,10 @@ void clear_led_button2(void)
 void process_button1(void)
 {
 	int change = 0;
-	static int disablecounter = 0; 
+	static int disablecounter = 0;
+	static float hue = 0.0;
+	static float sat = 0.0;
+	static float intens = 0.0;
 	if(disablecounter != 0)
 	{
 		disablecounter++;
@@ -120,7 +123,7 @@ void process_button1(void)
 				enable_atx();
 				set_stepmode(1);
 				disablecounter = 261;
-				setrgbvalues(255,255,255);
+				setcycelhsi(hue, sat, intens, 256);
 				print("[Button1]: pressed\n");
 			}
 		}
@@ -128,14 +131,10 @@ void process_button1(void)
 		{
 			if(button1 == 0 && get_tick() - button1_tick < 1000)
 			{
-				float hue;
-				float sat;
-				float intens;
 				get_hsi( &hue, &sat, &intens);
-				intens = 0.0;
 				set_stepmode(0);
 				disablecounter = 1;
-				setcycelhsi( hue, sat, intens, 256);
+				setcycelhsi( hue, sat, 0.0, 256);
 				print("[Button1]: pressed\n");
 			}
 		}
