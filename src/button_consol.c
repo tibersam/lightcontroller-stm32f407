@@ -145,7 +145,17 @@ void check_buttons(void)
 	//return point back to old value
 	if(tick == 300)
 	{
-		setcycelhsi( old_hue, old_sat, old_int, 256);
+		float target_sat = old_sat;
+		float target_int = old_int;
+		if(yellow_h != 0)
+		{
+			target_sat = 1.0;
+		}
+		if(white_i != 0)
+		{
+			target_int = 1.0;
+		}
+		setcycelhsi( old_hue, target_sat, target_int, 256);
 	}
 	//check if we need to increase tick. Rest stops, if not needed 
 	if(red_c != 0 || green_c != 0 || blue_c != 0 || yellow_h != 0 || white_i != 0)
