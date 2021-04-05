@@ -5,6 +5,7 @@
 #include "lightcontrol.h"
 #include "ws2812b.h"
 #include "button.h"
+#include "timeout_module.h"
 
 #define RED 0
 #define GREEN 1
@@ -197,7 +198,7 @@ void button_test(void)
 	button_box_puts("set white 1\n");
 	wait(10);
 	check_uart();	
-	wait(5000);
+	wait(3000);
 	button_box_puts("set red 0\n");
 	wait(10);
 	check_uart();	
@@ -236,6 +237,7 @@ void button_decoder(char *s, int len)
 	pos = my_strcmp(s, "[time]", len, 6);
 	if(pos != -1)
 	{
+		reset_timeout();
 		s = s + pos;
 		len = len - pos;
 		pos = find_next_argument(s, len);
@@ -250,6 +252,7 @@ void button_decoder(char *s, int len)
 	pos = my_strcmp(s, "[update]", len, 8);
 	if(pos != -1)
 	{
+		reset_timeout();
 		s = s + pos;
 		len = len - pos;
 		pos = find_next_argument(s, len);
@@ -387,7 +390,10 @@ void button_decode_time(char *s, int len)
 				tmpb = 255;
 			}
 		}
+		int wait = get_waitlength();
+		set_waitlength(1);
 		setrgbvalues(tmpr, tmpg, tmpb);
+		set_waitlength(wait);
 		print("[update colour] 0x");
 		char_to_asciihex(tmpr);
 		print(" | 0x");
