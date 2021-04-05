@@ -9,10 +9,11 @@
 #include "consol.h"
 #include "button_consol.h"
 #include "wait.h"
+#include "timeout_module.h"
 
 static int button1 = 0;
 static uint64_t button1_tick = 0;
-
+static int disablecounter = 0;
 
 void setup_gpio_button(void)
 {
@@ -21,6 +22,7 @@ void setup_gpio_button(void)
 	gpio_mode_setup(GPIOE, GPIO_MODE_INPUT, GPIO_PUPD_NONE, GPIO2|GPIO4);
 	gpio_clear(GPIOE, GPIO5|GPIO6);
 	button1 = 0;
+	disablecounter = 0;
 }
 
 int get_white(void)
@@ -74,10 +76,8 @@ void clear_led_button2(void)
 	gpio_clear(GPIOE, GPIO6);
 }
 
-void process_button1(void)
+void process_atx_switch(int mode)
 {
-	int change = 0;
-	static int disablecounter = 0;
 	static float hue = 0.0;
 	static float sat = 0.0;
 	static float intens = 0.0;
@@ -101,11 +101,35 @@ void process_button1(void)
 			set_led_button1();
 		}
 	}
+	if( mode == 1 )
+	{
+		get_hsi( &hue, &sat, &intens);
+		set_stepmode(0);
+		disablecounter = 1;
+		setcycelhsi( hue, sat, 0.0, 256);
+		set_led_button1();
+	}
+	if( mode == 2)
+	{
+		enable_atx();
+		set_stepmode(1);
+		int wait = get_waitlength();
+		set_waitlength(4);
+		disablecounter = 261;
+		setcycelhsi(hue, sat, intens, 256);
+		set_waitlength(wait);
+	}
+}
+
+void process_button1(void)
+{
+	int change = 0;
+	process_atx_switch(0);
 	if(button1 != get_button1())
 	{
 		change = 1;
 		button1 = get_button1();
-		if(button1 == 1)
+		if((button1 == 1) && (disablecounter == 0))
 		{
 			set_led_button1();
 		}	
@@ -113,6 +137,7 @@ void process_button1(void)
 		{
 			clear_led_button1();
 		}
+		reset_timeout();
 	}
 	if((disablecounter == 0) && (change == 1))
 	{
@@ -120,10 +145,7 @@ void process_button1(void)
 		{
 			if(button1 == 1)
 			{
-				enable_atx();
-				set_stepmode(1);
-				disablecounter = 261;
-				setcycelhsi(hue, sat, intens, 256);
+				process_atx_switch(2);
 				print("[Button1]: pressed\n");
 			}
 		}
@@ -131,10 +153,7 @@ void process_button1(void)
 		{
 			if(button1 == 0 && get_tick() - button1_tick < 1000)
 			{
-				get_hsi( &hue, &sat, &intens);
-				set_stepmode(0);
-				disablecounter = 1;
-				setcycelhsi( hue, sat, 0.0, 256);
+				process_atx_switch(1);
 				print("[Button1]: pressed\n");
 			}
 		}

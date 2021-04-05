@@ -20,6 +20,8 @@ void set_led_button2(void);
 
 void clear_led_button2(void);
 
+void process_atx_switch(int mode);
+
 void process_button1(void);
 
 void process_button(void);
