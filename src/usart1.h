@@ -29,6 +29,14 @@ void usart1_enable(void);
 void usart1_disable(void);
 
 /**
+ * usart1_recalc_baudrate
+ *
+ * This function recalculates the baudrate. Needed if Sysclock changed.
+ * Also do not calc if usart still enabled
+ */
+void usart1_recalc_baudrate(void);
+
+/**
  * usart5_get_char
  *
  * get char from ringbuffer, does not care about fill level 

@@ -79,6 +79,11 @@ void usart1_disable(void)
 	usart1_gpio_disable();
 }
 
+void usart1_recalc_baudrate(void)
+{
+        usart_set_baudrate(USART1, 115200);
+}
+
 /*
  * get current characters in rx buffer. Will be filled, if something is recieved. Concept is, main pulls periodically the buffer.
  * Content is coppied into s, l is lenght of buffer, so that an overfill is stoped
