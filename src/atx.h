@@ -9,6 +9,14 @@
 
 
 /**
+ * change_system_clock
+ *
+ * if mode 1 change clock to 8 MHz, if 0 to 164 MHz.
+ * Also recalculate all values needed for USART1 Baudrate
+ */
+void change_system_clock(int mode);
+
+/**
  * setup_gpio_atx
  *
  * Setup the gpio pins needed for controlling atx power supply and also
