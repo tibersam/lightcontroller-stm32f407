@@ -13,8 +13,10 @@
 #include "usart1.h"
 #include "usart3.h"
 #include "button_consol.h"
+#include "timeout_module.h"
 
 void init(void);
+
 
 static void clock_setup(void)
 {
@@ -45,6 +47,7 @@ void init(void)
 	consol_init();
 	setup_gpio_button();
 	button_decoder_init();
+	init_timeout_module();
 }
 
 int main(void)
@@ -76,13 +79,13 @@ int main(void)
 	for(i = 0; i < 6; i++)
 	{
 		check_uart();
-		wait(500);
+		wait(100);
 		gpio_toggle(GPIOA, GPIO6|GPIO7);
 	}
 	wait(200);
 	disable_atx();
 	gpio_clear(GPIOA, GPIO6|GPIO7);
-	for(i = 0; i < 6; i++)
+	for(i = 0; i < 2; i++)
 	{
 		wait(700);
 		gpio_toggle(GPIOA, GPIO6|GPIO7);
@@ -95,24 +98,27 @@ int main(void)
 	check_buttons();
 	set_stepmode(1);
 	setrgbvalues(255, 255, 255);
-	int j = 0;
+	set_waitlength(4);
+	reset_timeout();
 	while(1 == 1)
 	{
 		last_tick = get_tick();
 		if(get_atx_status() == 1)
 		{
+			gpio_clear(GPIOA, GPIO6|GPIO7);
 			sendbuffer();
 			calculatestep();
 			preparebuffer();
 			check_buttons();
 		}
-		gpio_toggle(GPIOA, GPIO6|GPIO7);
 		check_uart();
 		process_button();
+		check_timeout();
 		if(get_atx_status() == 0)
 		{
 			wait_until(last_tick + 500);
 		}
+		gpio_toggle(GPIOA, GPIO6|GPIO7);
 		wait_until(last_tick + 20);
 	}
 	disable_atx();
