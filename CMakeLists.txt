@@ -39,13 +39,17 @@ link_directories(${LIBOPENCM3_DIR}/lib /usr/lib/arm-none-eabi/newlib/armv7e-m/fp
 add_definitions(-DSTM32F4)
 
 set(STM32F4_FLAGS "-mfloat-abi=hard -mfpu=fpv4-sp-d16 -mthumb -mcpu=cortex-m4 -Wextra -Wimplicit-function-declaration -Wredundant-decls -Wmissing-prototypes -Wstrict-prototypes -Wundef -Wshadow -fno-common")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall ${STM32F4_FLAGS} -std=c11 -g -O0")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall ${STM32F4_FLAGS} -std=c11 -g -O2")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall --std=c++14 ${STM32F4_FLAGS}")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -T ${PROJECT_SOURCE_DIR}/linker/libopencm3_stm32f4.ld -nostartfiles --specs=rdimon.specs -g")
 
 function(add_bin_from_elf bin elf)
 	add_custom_target(${bin} ALL ${CMAKE_OBJCOPY} -Obinary ${elf} ${bin} DEPENDS ${elf})
 endfunction(add_bin_from_elf)
+
+function(add_lst_from_elf lst elf)
+	add_custom_target(${lst} ALL ${CMAKE_OBJDUMP} -S ${elf} > ${lst} DEPENDS ${elf})
+endfunction(add_lst_from_elf)
 
 #file(GLOB Source RELATIVE "src" "*.c")
 
@@ -81,10 +85,13 @@ target_sources(ws2812.elf
     "src/usart3.h"
     "src/button_consol.c"
     "src/button_consol.h"
+    "src/timeout_module.c"
+    "src/timeout_module.h"
 )
 
-target_link_libraries(ws2812.elf opencm3_stm32f4 m)
-add_bin_from_elf(ws2812.bin ws2812.elf)
+target_link_libraries(${TARGET}.elf opencm3_stm32f4 m)
+add_bin_from_elf(${TARGET}.bin ${TARGET}.elf)
+add_lst_from_elf(${TARGET}.lst ${TARGET}.elf)
 
 set(BINARY ${TARGET}.bin)
 
@@ -103,4 +110,4 @@ add_custom_target(debug
 	COMMAND ${DEBUGGER} -command ${CMAKE_CURRENT_LIST_DIR}/remote.gdbconf ${CMAKE_CURRENT_BINARY_DIR}/${TARGET}.elf 
 	DEPENDS ${TARGET}.elf
 	)
-add_dependencies(${TARGET}.bin libopencm3)
+add_dependencies(${TARGET}.elf libopencm3)
