@@ -5,6 +5,7 @@
 #include "consol.h"
 #include "lightcontrol.h"
 #include "atx.h"
+#include "timeout_module.h"
 
 void setrgb(char *s, int len);
 
@@ -26,9 +27,12 @@ void process_echo(char *s, int len);
 
 void process_uart5(char *s, int len);
 
+void process_timeout(char *s, int len);
+
 void decoder(char *s, int len)
 {
 	int pos = 0;
+	reset_timeout();
 	make_lower_case(s, len);
 	
 	pos = my_strcmp(s, "set", len, 3);
@@ -72,6 +76,8 @@ void decoder(char *s, int len)
 		print("		set echo on|off\n");
 		print("	uart5con: enable/disable uart 5 consol\n");
 		print("		set uart5con on|off\n");
+		print(" timeout: set the timeout ammount befor\n");
+		print("         the atx is switched off");
 		print("+++++++++++++++++++++++++++++++++++++++++\n");
 		return;
 	}
@@ -151,7 +157,24 @@ void process_set(char *s, int len)
 		process_uart5(s, len);
 		return;
 	}
+	pos = my_strcmp( s, "timeout", len, 7);
+	{
+		process_timeout(s + pos, len - pos);
+		return;
+	}
 	print("[ERROR]: No set subcommand found\n");
+}
+
+void process_timeout(char *s, int len)
+{
+	long long int timeout = get_number( &s, &len);
+	if(timeout == -1)
+	{
+		print("[ERROR]: Error in decoding timeout\n");
+		return;
+	}
+	set_timeouttime((uint64_t) timeout);
+	print("[OK]: Set timeout\n");
 }
 
 void process_uart5(char *s, int len)
