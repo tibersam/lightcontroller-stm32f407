@@ -11,10 +11,10 @@ uint16_t ledbuffer[NUMBERLED * NUMBERCOLLOR * NUMBERINCREASE];
 
 #ifndef USEDMA
 #ifdef USESPI2
-	int enable_send_spi2 = 0;  
+	volatile int enable_send_spi2 = 0;  
 #endif
 #ifdef USESPI3
-	int enable_send_spi3 = 0;
+	volatile int enable_send_spi3 = 0;
 #endif
 #endif
 
@@ -25,7 +25,7 @@ uint8_t myround (float x);
 
 uint8_t myround (float x)
 {
-	return (uint8_t) (x + 0.5);
+	return (uint8_t) (x + 0.5f);
 }
 
 
@@ -412,21 +412,22 @@ void setLEDwhite(int numberled, uint8_t white)
 void rgbtohsi(uint8_t red, uint8_t green, uint8_t blue,float * hue, float *saturation, float *intensity)
 {
 	float max, min, I, H, S, r, g, b, c;
+	H = 0.0f;
 	// normalice the rgb values
-	r = red / 255.0;
-	g = green / 255.0;
-	b = blue / 255.0;
+	r = red / 255.0f;
+	g = green / 255.0f;
+	b = blue / 255.0f;
 	// Calculate C
 	max = MAX(r, MAX(g,b));
 	min = MIN(r, MIN(g,b));
 	c = max-min;
 	// Calculate Intensity
-	I = (r + g + b) / 3.0;
+	I = (r + g + b) / 3.0f;
 	//Caculate Hue and Saturation
 	if(c == 0)
 	{
-		H = 0.0;
-		S = 0.0;
+		H = 0.0f;
+		S = 0.0f;
 	}
 	else
 	{
@@ -455,32 +456,32 @@ void hsitorgb(float hue, float saturation, float intensity, uint8_t *red, uint8_
 	float cos_h, cos_1047_h;
 
 	hue = fmod(hue,360);
-	hue = 3.14159 * hue/(float)180;
+	hue = 3.14159f * hue/(float)180;
 	//saturation = saturation>0?(saturation<1?saturation:1):0;
 	//intensity = intensity>0?(intensity<1?intensity:1):0;
 
-	if(hue < 2.09439){
+	if(hue < 2.09439f){
 		cos_h = cos(hue);
-		cos_1047_h = cos(1.047196667 - hue);
-		r = saturation * 255 * intensity / 3.0*(1+cos_h/cos_1047_h);
-		g = saturation * 255 * intensity / 3.0*(1+(1-cos_h/cos_1047_h));
+		cos_1047_h = cos(1.047196667f - hue);
+		r = saturation * 255.0f * intensity / 3.0f*(1+cos_h/cos_1047_h);
+		g = saturation * 255.0f * intensity / 3.0f*(1+(1-cos_h/cos_1047_h));
 		b = 0;
-		w = 255 * intensity/3*(1 - saturation);
-	}else if( hue < 4.188787){
-		hue = hue - 2.09439;
+		w = 255.0f * intensity/3*(1 - saturation);
+	}else if( hue < 4.188787f){
+		hue = hue - 2.09439f;
 		cos_h = cos(hue);
-		cos_1047_h = cos(1.047196667 - hue);
+		cos_1047_h = cos(1.047196667f - hue);
 		r = 0;
-		g = saturation * 255 * intensity / 3.0*(1+cos_h/cos_1047_h);
-		b = saturation * 255 * intensity / 3.0*(1+(1-cos_h/cos_1047_h));
+		g = saturation * 255.0f * intensity / 3.0f*(1+cos_h/cos_1047_h);
+		b = saturation * 255.0f * intensity / 3.0f*(1+(1-cos_h/cos_1047_h));
 		w = 255 * intensity/3*(1 - saturation);
 	}else{
-		hue = hue - 4.188787;
+		hue = hue - 4.188787f;
 		cos_h = cos(hue);
-		cos_1047_h = cos(1.047196667 - hue);
-		r = saturation * 255 * intensity / 3.0*(1+(1-cos_h/cos_1047_h));
+		cos_1047_h = cos(1.047196667f - hue);
+		r = saturation * 255.0f * intensity / 3.0f*(1+(1-cos_h/cos_1047_h));
 		g = 0;
-		b = saturation * 255 * intensity / 3.0*(1+cos_h/cos_1047_h);
+		b = saturation * 255.0f * intensity / 3.0f*(1+cos_h/cos_1047_h);
 		w = 255 * intensity/3*(1 - saturation);
 	}
 	*red = (uint8_t)r;
