@@ -4,15 +4,28 @@
 
 volatile uint64_t tick;
 
-void init_wait(void)
+void change_systick(int mode)
 {
-	tick = 0;
 	systick_counter_disable();
 	systick_set_clocksource(STK_CSR_CLKSOURCE_AHB);
-	systick_set_reload(168000);
+	if( mode == 0)
+	{
+		systick_set_reload(168000);
+	}
+	else
+	{
+		systick_set_reload(8000);
+	}
 	systick_clear();
 	systick_counter_enable();
 	systick_interrupt_enable();
+}
+
+
+void init_wait(void)
+{
+	tick = 0;
+	change_systick(0);
 }
 
 uint64_t get_tick(void)

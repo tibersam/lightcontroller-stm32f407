@@ -4,7 +4,14 @@
 #include <libopencm3/cm3/systick.h>
 #include <libopencm3/cm3/nvic.h>
 
-
+/**
+ * change_systick
+ *
+ * change systick frequenzy to remain a 1ms tick time.
+ * mode 0 : frequenzy is 168 MHz
+ * mode 1 : frequenzy is 8 MHz
+ */
+void change_systick(int mode);
 /**
  * init_wait
  * 
