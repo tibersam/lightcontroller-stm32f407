@@ -10,6 +10,7 @@ void setrgbvalues(int red, int green, int blue);
 void sethsivalues(int hue, int saturation, int intensity);
 void setlimitrgb(int red, int green, int blue, int offset, int length, int mode);
 int set_stepmode(int step);
+int get_waitlength(void);
 int get_stepmode(void);
 void set_waitlength(int wait);
 void get_hsi(float *hue, float *sat, float *intens);

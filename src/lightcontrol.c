@@ -9,7 +9,7 @@ extern int incrementwaittimer;
 void setuplightcontroller(void)
 {
 	stepmode = 1;
-	waitlength = 4;
+	waitlength = 2;
 }
 
 int set_stepmode(int step)
@@ -36,6 +36,10 @@ void set_waitlength(int wait)
 	waitlength = wait;
 }
 
+int get_waitlength(void)
+{
+	return waitlength;
+}
 
 void get_hsi(float *hue, float *sat, float *intens)
 {
@@ -56,15 +60,15 @@ void setcycelhsi(float hue, float sat, float intens, float interval)
    for(i = 0; i < NUMBERLED; i++)
    {
      value1 = target_hue - lights[i].current_hue;
-     if(value1 >= 180.0 )
+     if(value1 >= 180.0f )
      {
-       value2 = (value1 - 360.0);
+       value2 = (value1 - 360.0f);
      }
      else
      {
-       if(value1 <= -180)
+       if(value1 <= -180.0f)
        {
-         value2 = 360 + value1;
+         value2 = 360.0f + value1;
        }
        else
        {
@@ -90,24 +94,24 @@ void setrgbvalues(int red, int green, int blue)
    for(i = 0; i < NUMBERLED; i++)
    {
      value1 = target_hue - lights[i].current_hue;
-     if(value1 >= 180.0 )
+     if(value1 >= 180.0f )
      {
-       value2 = (value1 - 360.0);
+       value2 = (value1 - 360.0f);
      }
      else
      {
-       if(value1 <= -180)
+       if(value1 <= -180.0f)
        {
-         value2 = 360 + value1;
+         value2 = 360.0f + value1;
        }
        else
        {
          value2 = value1;
        }
      }
-     lights[i].step_hue = value2/255.0;
-     lights[i].step_sat = ((target_sat - lights[i].current_sat)/255.0);
-     lights[i].step_int = ((target_int - lights[i].current_int)/255.0);
+     lights[i].step_hue = value2/255.0f;
+     lights[i].step_sat = ((target_sat - lights[i].current_sat)/255.0f);
+     lights[i].step_int = ((target_int - lights[i].current_int)/255.0f);
    }
    setstepspeed();
 }
@@ -163,9 +167,9 @@ void sethsivalues(int hue, int saturation, int intensity)
   int i = 0;
   for(i = 0; i < NUMBERLED; i++)
   {
-    lights[i].step_hue = (lights[i].current_hue -(float) hue)/254.0;
-    lights[i].step_sat = (lights[i].current_sat -(((float)(saturation % 254))/254.0))/254.0;
-    lights[i].step_int = (lights[i].current_int -(((float)(intensity % 254))/254.0)/254.0);
+    lights[i].step_hue = (lights[i].current_hue -(float) hue)/254.0f;
+    lights[i].step_sat = (lights[i].current_sat -(((float)(saturation % 254))/254.0f))/254.0f;
+    lights[i].step_int = (lights[i].current_int -(((float)(intensity % 254))/254.0f)/254.0f);
   }
   setstepspeed();
 }
@@ -183,24 +187,24 @@ void setlimitrgb(int red, int green, int blue, int offset, int length, int mode)
    for(i = 0; i < length; i++)
    {
      value1 = target_hue - lights[i+offset].current_hue;
-     if(value1 >= 180.0 )
+     if(value1 >= 180.0f )
      {
-       value2 = (value1 - 360.0);
+       value2 = (value1 - 360.0f);
      }
      else
      {
-       if(value1 <= -180)
+       if(value1 <= -180.0f)
        {
-         value2 = 360 + value1;
+         value2 = 360.0f + value1;
        }
        else
        {
          value2 = value1;
        }
      }
-     lights[i+offset].step_hue = value2/255.0;
-     lights[i+offset].step_sat = ((target_sat - lights[i+offset].current_sat)/255.0);
-     lights[i+offset].step_int = ((target_int - lights[i+offset].current_int)/255.0);
+     lights[i+offset].step_hue = value2/255.0f;
+     lights[i+offset].step_sat = ((target_sat - lights[i+offset].current_sat)/255.0f);
+     lights[i+offset].step_int = ((target_int - lights[i+offset].current_int)/255.0f);
    }
 
   switch(mode)
@@ -243,9 +247,9 @@ void calculatestep(void)
        if(lights[i].t < 256)
        {
          hack = fmod(lights[i].step_hue + lights[i].current_hue,360);
-         if(hack < 0.0)
+         if(hack < 0.0f)
          {
-           hack = hack + 360;
+           hack = hack + 360.0f;
          }
          lights[i].current_hue = hack;
          lights[i].current_int += lights[i].step_int;
