@@ -104,20 +104,24 @@ void process_atx_switch(int mode)
 	if( mode == 1 )
 	{
 		get_hsi( &hue, &sat, &intens);
+		int stepmode = get_stepmode();
 		set_stepmode(0);
 		disablecounter = 1;
 		setcycelhsi( hue, sat, 0.0, 256);
 		set_led_button1();
+		set_stepmode(stepmode);
 	}
 	if( mode == 2)
 	{
 		enable_atx();
+		int stepmode = get_stepmode();
 		set_stepmode(1);
 		int wait = get_waitlength();
 		set_waitlength(4);
 		disablecounter = 261;
 		setcycelhsi(hue, sat, intens, 256);
 		set_waitlength(wait);
+		set_stepmode(stepmode);
 	}
 }
 
