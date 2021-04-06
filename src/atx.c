@@ -77,11 +77,10 @@ void enable_atx(void)
 	print("[ATX] Send endable signal\n");
 	for(int i = 0; i < NUMBERLED; i++)
 	{
-		setLEDrgbhsi(i, 0, 0, 0);
+		setLEDrgbw(i, 0, 0, 0, 0);
 	}
-	setrgbvalues(0,0,0);	
-	calculatestep();
 	preparebuffer();
+	force_update_led();
 	gpio_set(GPIOE,GPIO3);
 	sendbuffer();
 	usart3_enable();
@@ -93,7 +92,7 @@ void enable_atx(void)
 	//	wait(1);
 	}
 	usart5_enable();
-	print("[ATX] Atx on\n");
+	print("[OK]: Atx on\n");
 }
 
 void disable_atx(void)
@@ -110,7 +109,7 @@ void disable_atx(void)
 	{
 		change_system_clock(1);
 	}
-	print("[ATX]: remove enable signal\n ");
+	print("[OK]: remove enable signal\n ");
 	//disable atx 
 	gpio_clear(GPIOE, GPIO1);
 	print("[ATX]: Atx off\n");
