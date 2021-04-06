@@ -6,6 +6,8 @@
 #include "lightcontrol.h"
 #include "atx.h"
 #include "timeout_module.h"
+#include "button.h"
+#include "ws2812b.h"
 
 void setrgb(char *s, int len);
 
@@ -13,7 +15,7 @@ void setmode(char *s, int len);
 
 void process_set(char *s, int len);
 
-long long int get_number(char **s, int *len);
+long long int get_number(char **s, int *len, int bytenumber);
 
 void process_setlimitrgb(char *s, int len);
 
@@ -29,6 +31,12 @@ void process_uart5(char *s, int len);
 
 void process_timeout(char *s, int len);
 
+void process_ligths(char *s, int len);
+
+void process_get(char *s, int len);
+
+void process_get_rgbw(char *s, int len);
+
 void decoder(char *s, int len)
 {
 	int pos = 0;
@@ -41,6 +49,12 @@ void decoder(char *s, int len)
 		s = s + pos;
 		len = len - pos;
 		process_set(s, len);
+		return;
+	}
+	pos = my_strcmp(s, "get", len, 3);
+	if(pos != -1)
+	{
+		process_get(s + pos, len - pos);
 		return;
 	}
 	if(my_strcmp(s, "version", len, 6) != -1)
@@ -57,7 +71,7 @@ void decoder(char *s, int len)
 	{
 		print("+++++++++++++++++++++++++++++++++++++++++\n");
 		print("High level commands:\n");
-		print("	set, version, status\n");
+		print("	set, get, version, status\n");
 		print("set commands:\n");
 		print("	limit: Set a range of leds the collor\n");
 		print("		set limit r g b offset length mode\n");
@@ -77,7 +91,14 @@ void decoder(char *s, int len)
 		print("	uart5con: enable/disable uart 5 consol\n");
 		print("		set uart5con on|off\n");
 		print(" timeout: set the timeout ammount befor\n");
-		print("         the atx is switched off");
+		print("         the atx is switched off\n");
+		print("	        set timeout {number}\n");
+		print(" lights: on or off\n");
+		print("         set lights on|off\n");
+		print("get commands:\n");
+		print(" rgbw: returns the rgbw values of leds\n");
+		print("      with pos and len\n");
+		print("       get rgbw pos len\n");
 		print("+++++++++++++++++++++++++++++++++++++++++\n");
 		return;
 	}
@@ -96,6 +117,45 @@ void process_status(void)
 		print("off");
 	}
 	print(" \n");
+}
+
+void process_get(char *s, int len)
+{
+	int pos = my_strcmp(s, "rgbw", len, 4);
+	if(pos != -1)
+	{
+		process_get_rgbw( s + pos, len - pos);
+	}
+}
+
+void process_get_rgbw(char *s, int len)
+{
+	long long int numposled = get_number(&s, &len, 2);
+	long long int ledlen = get_number(&s, &len, 2);
+	if((numposled == -1) || (ledlen == -1))
+	{
+		print("[ERROR]: numberled or len not correctly decoded\n");
+		return;
+	}
+	if(numposled + ledlen >= NUMBERLED)
+	{
+		print("[ERROR]: To many led were addressed\n");
+	}
+	print("[OK]: ");
+	for(int i = 0; i < ledlen; i++)
+	{
+		uint8_t red, green, blue, white;
+		getrgbwLED(numposled + i, &red, &green, &blue, &white);
+		char_to_asciihex(red);
+		print(" ");
+		char_to_asciihex(green);
+		print(" ");
+		char_to_asciihex(blue);
+		print(" ");
+		char_to_asciihex(white);
+		print(" | ");
+	}
+	print("\n");
 }
 
 void process_set(char *s, int len)
@@ -157,7 +217,14 @@ void process_set(char *s, int len)
 		process_uart5(s, len);
 		return;
 	}
+	pos = my_strcmp( s, "lights", len, 6);
+	if(pos != -1)
+	{
+		process_ligths(s + pos, len - pos);
+		return;
+	}
 	pos = my_strcmp( s, "timeout", len, 7);
+	if(pos !=- 1)
 	{
 		process_timeout(s + pos, len - pos);
 		return;
@@ -165,9 +232,26 @@ void process_set(char *s, int len)
 	print("[ERROR]: No set subcommand found\n");
 }
 
+void process_ligths(char *s, int len)
+{
+	if(my_strcmp(s, "off", len, 3) != -1)
+	{
+		process_atx_switch(1);
+		print("[OK]: lights off\n");
+		return;
+	}
+	if(my_strcmp(s, "on", len, 2) != -1)
+	{
+		process_atx_switch(2);
+		print("[OK]: lights on\n");
+		return;
+	}
+	print("[ERROR]: lights only takes on|off\n");
+}
+
 void process_timeout(char *s, int len)
 {
-	long long int timeout = get_number( &s, &len);
+	long long int timeout = get_number( &s, &len, 4);
 	if(timeout == -1)
 	{
 		print("[ERROR]: Error in decoding timeout\n");
@@ -228,7 +312,7 @@ void set_atx(char *s, int len)
 
 void set_stepnumber(char *s, int len)
 {
-	long long int step = get_number( &s, &len);
+	long long int step = get_number( &s, &len, 4);
 	if(step == -1)
 	{
 		print("[ERROR] Missing step argument\n");
@@ -238,7 +322,7 @@ void set_stepnumber(char *s, int len)
 	print("[OK]: Set step length\n");
 }
 
-long long int get_number(char **s, int *len)
+long long int get_number(char **s, int *len, int numbytes)
 {
 	int pos;
 	pos = find_next_argument(*s, *len);
@@ -248,18 +332,18 @@ long long int get_number(char **s, int *len)
 	}
 	*s = *s + pos;
 	*len = *len - pos;
-	return asciinum_to_int_flex(*s, *len, 1);
+	return asciinum_to_int_flex(*s, *len, numbytes);
 }
 
 void process_setlimitrgb(char *s, int len)
 {
 	long long int r, g, b, offset, length, mode;
-	r = get_number( &s, &len);
-	g = get_number( &s, &len);
-	b = get_number( &s, &len);
-	offset = get_number( &s, &len);
-	length = get_number( &s, &len);
-	mode = get_number( &s, &len);
+	r = get_number( &s, &len, 1);
+	g = get_number( &s, &len, 1);
+	b = get_number( &s, &len, 1);
+	offset = get_number( &s, &len, 2);
+	length = get_number( &s, &len, 2);
+	mode = get_number( &s, &len, 1);
 	
 	if((r == -1) || (g == -1) || (b == -1) || (offset == -1) || (length == -1)|| (mode == -1))
 	{
