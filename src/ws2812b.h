@@ -88,13 +88,21 @@ void setupdma(uint32_t dma, uint8_t stream, uint32_t channel, uint32_t spi_addre
 uint8_t inflatetwobits(uint8_t data, uint8_t mask1, uint8_t mask0);
 void inflatebyte(uint8_t data, int i);
 void preparebuffer(void);
+void force_update_led(void);
 void sendbuffer(void);
 void setLED(int numberled, uint8_t red, uint8_t green, uint8_t blue);
+void getLED(int numberled, uint8_t *red, uint8_t *green, uint8_t *blue);
 void setLEDred(int numberled, uint8_t red);
+uint8_t getLEDred(int numberled);
 void setLEDgreen(int numberled, uint8_t green);
+uint8_t getLEDgreen(int numberled);
 void setLEDblue(int numberled, uint8_t blue);
+uint8_t getLEDblue(int numberled);
 #if defined(SK2812LED) || defined(SK2812SPI)
+void setLEDrgbw(int numberled, uint8_t red, uint8_t green, uint8_t blue, uint8_t white);
 void setLEDwhite(int numberled, uint8_t white);
+uint8_t getLEDwhite(int numberled);
+void getrgbwLED(int numberled, uint8_t *red, uint8_t *green, uint8_t *blue, uint8_t *white);
 void setLEDrgbhsi(int numberled, uint8_t red, uint8_t green, uint8_t blue);
 void rgbtohsi(uint8_t red, uint8_t green, uint8_t blue,float * hue, float *saturation, float *intensity);
 void hsitorgb(float hue, float saturation, float intensity, uint8_t *red, uint8_t *green, uint8_t *blue, uint8_t *white);

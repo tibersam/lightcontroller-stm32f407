@@ -306,8 +306,6 @@ void preparebuffer(void)
 	int i = 0;
 	for(i = 0; i < NUMBERLED; i++)
 	{
-		//ledbuffer[i*(NUMBERCOLLOR)] = (lights[i].red << 8) + lights[i].green;
-		//ledbuffer[i*NUMBERCOLLOR+1] = (lights[i].white << 8) + lights[i].blue;
 		ledbuffer[i*(NUMBERCOLLOR)*NUMBERINCREASE] = lights[i].green;
 		ledbuffer[i*(NUMBERCOLLOR)*NUMBERINCREASE+1] = lights[i].red;
 		ledbuffer[i*NUMBERCOLLOR * NUMBERINCREASE+2] = lights[i].blue;
@@ -319,13 +317,26 @@ void preparebuffer(void)
 
 void setLED(int numberled, uint8_t red, uint8_t green, uint8_t blue)
 {
-	lights[numberled].red = red;
-	lights[numberled].green = green;
-	lights[numberled].blue = blue;
+	setLEDred(numberled, red);
+	setLEDgreen(numberled, green);
+	setLEDblue(numberled, blue);
 }
+
+void getLED(int numberled, uint8_t *red, uint8_t *green, uint8_t *blue)
+{
+	*red = getLEDred(numberled);
+	*green = getLEDgreen(numberled);
+	*blue = getLEDblue(numberled);
+}
+
 void setLEDred(int numberled, uint8_t red)
 {
 	lights[numberled].red = red;
+}
+
+uint8_t getLEDred(int numberled)
+{
+	return lights[numberled].red;
 }
 
 void setLEDgreen(int numberled, uint8_t green)
@@ -333,9 +344,19 @@ void setLEDgreen(int numberled, uint8_t green)
 	lights[numberled].green = green;
 }
 
+uint8_t getLEDgreen(int numberled)
+{
+	return lights[numberled].green;
+}
+
 void setLEDblue(int numberled, uint8_t blue)
 {
 	lights[numberled].blue = blue;
+}
+
+uint8_t getLEDblue(int numberled)
+{
+	return lights[numberled].blue;
 }
 
 
@@ -358,13 +379,18 @@ void setup_isr_spi(void)
 #endif
 }
 
+void force_update_led(void)
+{
+	incrementwaittimer = 10000;
+}
+
 
 void sendbuffer(void)
 {
 	incrementwaittimer += 1;
 
 
-	if(incrementwaittimer > 500)
+	if(incrementwaittimer > 2000)
 	{
 		incrementwaittimer = 0;
 #ifdef USEDMA
@@ -404,9 +430,26 @@ void setLEDrgbhsi(int numberled, uint8_t red, uint8_t green, uint8_t blue)
 	hsitorgb(hue, saturation, intensity,&(lights[numberled].red),&(lights[numberled].green), &(lights[numberled].blue), &(lights[numberled].white));
 }
 
+void setLEDrgbw(int numberled, uint8_t red, uint8_t green, uint8_t blue, uint8_t white)
+{
+	setLED(numberled, red, green, blue);
+	setLEDwhite(numberled, white);
+}
+
 void setLEDwhite(int numberled, uint8_t white)
 {
 	lights[numberled].white = white;
+}
+
+uint8_t getLEDwhite(int numberled)
+{
+	return lights[numberled].white;
+}
+
+void getrgbwLED(int numberled, uint8_t *red, uint8_t *green, uint8_t *blue, uint8_t *white)
+{
+	getLED(numberled, red, green, blue);
+	*white = getLEDwhite(numberled);
 }
 
 void rgbtohsi(uint8_t red, uint8_t green, uint8_t blue,float * hue, float *saturation, float *intensity)
@@ -472,16 +515,16 @@ void hsitorgb(float hue, float saturation, float intensity, uint8_t *red, uint8_
 		cos_h = cos(hue);
 		cos_1047_h = cos(1.047196667f - hue);
 		r = 0;
-		g = saturation * 255.0f * intensity / 3.0f*(1+cos_h/cos_1047_h);
-		b = saturation * 255.0f * intensity / 3.0f*(1+(1-cos_h/cos_1047_h));
+		g = saturation * 255.0 * intensity / 3.0f*(1+cos_h/cos_1047_h);
+		b = saturation * 255.0 * intensity / 3.0f*(1+(1-cos_h/cos_1047_h));
 		w = 255 * intensity/3*(1 - saturation);
 	}else{
 		hue = hue - 4.188787f;
 		cos_h = cos(hue);
 		cos_1047_h = cos(1.047196667f - hue);
-		r = saturation * 255.0f * intensity / 3.0f*(1+(1-cos_h/cos_1047_h));
+		r = saturation * 255.0 * intensity / 3.0f*(1+(1-cos_h/cos_1047_h));
 		g = 0;
-		b = saturation * 255.0f * intensity / 3.0f*(1+cos_h/cos_1047_h);
+		b = saturation * 255.0 * intensity / 3.0f*(1+cos_h/cos_1047_h);
 		w = 255 * intensity/3*(1 - saturation);
 	}
 	*red = (uint8_t)r;
