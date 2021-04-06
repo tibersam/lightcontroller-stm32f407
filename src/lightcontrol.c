@@ -3,7 +3,6 @@
 extern LED lights[NUMBERLED];
 int stepmode;
 int waitlength;
-extern int incrementwaittimer;
 
 
 void setuplightcontroller(void)
@@ -255,7 +254,7 @@ void calculatestep(void)
          lights[i].current_int += lights[i].step_int;
          lights[i].current_sat += lights[i].step_sat;
          hsitorgb(lights[i].current_hue, lights[i].current_sat, lights[i].current_int,&(lights[i].red),&(lights[i].green), &(lights[i].blue), &(lights[i].white));
-         incrementwaittimer = 1200000000;
+         force_update_led();
 	}
     }
     if(lights[i].t < 270)
