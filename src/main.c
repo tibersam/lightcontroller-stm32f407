@@ -56,19 +56,11 @@ int main(void)
 	init();
 	//disable_atx();
 	gpio_toggle(GPIOA, GPIO6);
-	int i = 0;
-	while(1)
+	for(int i = 0; i < 20; i++)
 	{
 		wait(100);
 		gpio_toggle(GPIOA, GPIO6);
-		i++;
-		if(i == 20)
-		{
-			break;
-		}
-
 	}
-	i = 0;
 	enable_atx();
 	print("Welcome to Lightcontroller Version 2.0\n");
 	print("Testing ATX\n");
@@ -76,7 +68,7 @@ int main(void)
 	button_test();
 	gpio_set(GPIOA, GPIO6);
 	gpio_clear(GPIOA, GPIO7);
-	for(i = 0; i < 6; i++)
+	for(int i = 0; i < 6; i++)
 	{
 		check_uart();
 		wait(100);
@@ -85,21 +77,22 @@ int main(void)
 	wait(200);
 	disable_atx();
 	gpio_clear(GPIOA, GPIO6|GPIO7);
-	for(i = 0; i < 2; i++)
+	for(int i = 0; i < 2; i++)
 	{
-		wait(700);
+		wait(500);
 		gpio_toggle(GPIOA, GPIO6|GPIO7);
 	}
 	enable_atx();
-	print("[READY] Selftest complete\n");
-	print("Enable Consol\n");
-	uint64_t last_tick = get_tick();
+	print("[READY]: Selftest complete\n");
+	print("[READY]: Enable Consol\n");
+	uint64_t last_tick = 0;
 	check_uart();
 	check_buttons();
 	set_stepmode(1);
 	setrgbvalues(255, 255, 255);
 	set_waitlength(4);
 	reset_timeout();
+	print("[START]: Start main loop\n");
 	while(1 == 1)
 	{
 		last_tick = get_tick();
@@ -116,7 +109,13 @@ int main(void)
 		check_timeout();
 		if(get_atx_status() == 0)
 		{
-			wait_until(last_tick + 500);
+			while(get_tick() < last_tick + 400)
+			{
+				if(get_button1() == 1)
+					break;
+				wait(50);
+				gpio_toggle(GPIOA, GPIO6);
+			}
 		}
 		gpio_toggle(GPIOA, GPIO6|GPIO7);
 		wait_until(last_tick + 20);
