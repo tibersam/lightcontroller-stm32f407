@@ -104,8 +104,10 @@ void setLEDwhite(int numberled, uint8_t white);
 uint8_t getLEDwhite(int numberled);
 void getrgbwLED(int numberled, uint8_t *red, uint8_t *green, uint8_t *blue, uint8_t *white);
 void setLEDrgbhsi(int numberled, uint8_t red, uint8_t green, uint8_t blue);
+/*
 void rgbtohsi(uint8_t red, uint8_t green, uint8_t blue,float * hue, float *saturation, float *intensity);
 void hsitorgb(float hue, float saturation, float intensity, uint8_t *red, uint8_t *green, uint8_t *blue, uint8_t *white);
+*/
 void testfunction(float hue, float saturation, float intensity, uint8_t *red, uint8_t *green, uint8_t *blue, uint8_t *white);
 
 #endif

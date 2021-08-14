@@ -6,6 +6,7 @@
 #include "ws2812b.h"
 #include "button.h"
 #include "timeout_module.h"
+#include "rgbhsi.h"
 
 #define RED 0
 #define GREEN 1

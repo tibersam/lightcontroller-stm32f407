@@ -1,4 +1,5 @@
 #include "lightcontrol.h"
+#include "rgbhsi.h"
 
 extern LED lights[NUMBERLED];
 int stepmode;
@@ -253,7 +254,7 @@ void calculatestep(void)
          lights[i].current_hue = hack;
          lights[i].current_int += lights[i].step_int;
          lights[i].current_sat += lights[i].step_sat;
-         hsitorgb(lights[i].current_hue, lights[i].current_sat, lights[i].current_int,&(lights[i].red),&(lights[i].green), &(lights[i].blue), &(lights[i].white));
+         hsitorgbw(lights[i].current_hue, lights[i].current_sat, lights[i].current_int,&(lights[i].red),&(lights[i].green), &(lights[i].blue), &(lights[i].white));
          force_update_led();
 	}
     }

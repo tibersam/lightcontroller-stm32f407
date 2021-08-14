@@ -1,6 +1,7 @@
 #include "ws2812b.h"
 
 #include "wait.h"
+#include "rgbhsi.h"
 
 #define MAX(x,y) (((x) > (y)) ? (x) : (y))
 #define MIN(x,y) (((x) < (y)) ? (x) : (y))
@@ -427,7 +428,7 @@ void setLEDrgbhsi(int numberled, uint8_t red, uint8_t green, uint8_t blue)
 {
 	float hue, saturation, intensity;
 	rgbtohsi(red, green, blue, &hue, &saturation, &intensity);
-	hsitorgb(hue, saturation, intensity,&(lights[numberled].red),&(lights[numberled].green), &(lights[numberled].blue), &(lights[numberled].white));
+	hsitorgbw(hue, saturation, intensity,&(lights[numberled].red),&(lights[numberled].green), &(lights[numberled].blue), &(lights[numberled].white));
 }
 
 void setLEDrgbw(int numberled, uint8_t red, uint8_t green, uint8_t blue, uint8_t white)
@@ -452,6 +453,7 @@ void getrgbwLED(int numberled, uint8_t *red, uint8_t *green, uint8_t *blue, uint
 	*white = getLEDwhite(numberled);
 }
 
+/*
 void rgbtohsi(uint8_t red, uint8_t green, uint8_t blue,float * hue, float *saturation, float *intensity)
 {
 	float max, min, I, H, S, r, g, b, c;
@@ -469,7 +471,7 @@ void rgbtohsi(uint8_t red, uint8_t green, uint8_t blue,float * hue, float *satur
 	//Caculate Hue and Saturation
 	if(c == 0)
 	{
-		H = 0.0f;
+		H = *hue;
 		S = 0.0f;
 	}
 	else
@@ -480,11 +482,11 @@ void rgbtohsi(uint8_t red, uint8_t green, uint8_t blue,float * hue, float *satur
 		}
 		if(g == max)
 		{
-			H = 60 * (((b-r)/c)+2);
+			H = 60 * ((b-r)/c)+2;
 		}
 		if(b == max)
 		{
-			H = 60 * (((r-g)/c)+4);
+			H = 60 * ((r-g)/c)+4;
 		}
 
 		S = 1 - (min / I);
@@ -493,45 +495,58 @@ void rgbtohsi(uint8_t red, uint8_t green, uint8_t blue,float * hue, float *satur
 	*saturation = S;
 	*intensity = I;
 }
-void hsitorgb(float hue, float saturation, float intensity, uint8_t *red, uint8_t *green, uint8_t *blue, uint8_t *white)
+*/
+/*
+void hsitorgbw(float hue, float saturation, float intensity, uint8_t *red, uint8_t *green, uint8_t *blue, uint8_t *white)
 {
 	uint8_t r, g, b, w;
 	float cos_h, cos_1047_h;
 
 	hue = fmod(hue,360);
+	if(hue < 0)
+	{
+		hue = hue + 360;
+	}
 	hue = 3.14159f * hue/(float)180;
-	//saturation = saturation>0?(saturation<1?saturation:1):0;
-	//intensity = intensity>0?(intensity<1?intensity:1):0;
+	saturation = saturation>0?(saturation<1?saturation:1):0;
+	intensity = intensity>0?(intensity<1?intensity:1):0;
 
 	if(hue < 2.09439f){
 		cos_h = cos(hue);
 		cos_1047_h = cos(1.047196667f - hue);
-		r = saturation * 255.0f * intensity / 3.0f*(1+cos_h/cos_1047_h);
-		g = saturation * 255.0f * intensity / 3.0f*(1+(1-cos_h/cos_1047_h));
+		r = saturation * 255.0f * (intensity/3.0f )*(1+cos_h/cos_1047_h);
+		g = saturation * 255.0f * (intensity/3.0f )*(1+(1-cos_h/cos_1047_h));
 		b = 0;
-		w = 255.0f * intensity/3*(1 - saturation);
+		w = 255.0f * intensity *(1 - saturation);
 	}else if( hue < 4.188787f){
 		hue = hue - 2.09439f;
 		cos_h = cos(hue);
 		cos_1047_h = cos(1.047196667f - hue);
 		r = 0;
-		g = saturation * 255.0 * intensity / 3.0f*(1+cos_h/cos_1047_h);
-		b = saturation * 255.0 * intensity / 3.0f*(1+(1-cos_h/cos_1047_h));
-		w = 255 * intensity/3*(1 - saturation);
+		g = saturation * 255.0f * (intensity/3.0f)*(1+cos_h/cos_1047_h);
+		b = saturation * 255.0f * (intensity/3.0f)*(1+(1-cos_h/cos_1047_h));
+		w = 255.0f * intensity *(1 - saturation);
 	}else{
 		hue = hue - 4.188787f;
 		cos_h = cos(hue);
 		cos_1047_h = cos(1.047196667f - hue);
-		r = saturation * 255.0 * intensity / 3.0f*(1+(1-cos_h/cos_1047_h));
+		r = saturation * 255.0f * (intensity/3.0f)*(1+(1-cos_h/cos_1047_h));
 		g = 0;
-		b = saturation * 255.0 * intensity / 3.0f*(1+cos_h/cos_1047_h);
-		w = 255 * intensity/3*(1 - saturation);
+		b = saturation * 255.0f * (intensity/3.0f)*(1+cos_h/cos_1047_h);
+		w = 255.0f * intensity *(1 - saturation);
 	}
+	r = r * 3.0f;
+	r = r >0.0f?(r<255.0f?r:255.0f):0.0f;
+	g = g * 3.0f;
+	g = g >0.0f?(g<255.0f?g:255.0f):0.0f;
+	b = b * 3.0f;
+	b = b >0.0f?(b<255.0f?b:255.0f):0.0f;
 	*red = (uint8_t)r;
 	*green = (uint8_t)g;
 	*blue = (uint8_t)b;
 	*white = (uint8_t)w;
 }
+*/
 
 void testfunction(float hue, float saturation, float intensity, uint8_t *red, uint8_t *green, uint8_t *blue, uint8_t *white)
 {
