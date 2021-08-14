@@ -38,8 +38,8 @@ include_directories(${LIBOPENCM3_DIR}/include ${CMAKE_SOURCE_DIR}/src /usr/lib/a
 link_directories(${LIBOPENCM3_DIR}/lib /usr/lib/arm-none-eabi/newlib/armv7e-m/fpu)
 add_definitions(-DSTM32F4)
 
-set(STM32F4_FLAGS "-mfloat-abi=hard -mfpu=fpv4-sp-d16 -mthumb -mcpu=cortex-m4 -Wextra -Wimplicit-function-declaration -Wredundant-decls -Wmissing-prototypes -Wstrict-prototypes -Wundef -Wshadow -fno-common")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall ${STM32F4_FLAGS} -std=c11 -g -O2")
+set(STM32F4_FLAGS "-mfloat-abi=hard -mfpu=fpv4-sp-d16 -mthumb -mcpu=cortex-m4 -lm -Wextra -Wimplicit-function-declaration -Wredundant-decls -Wmissing-prototypes -Wstrict-prototypes -Wundef -Wshadow -fno-common")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall ${STM32F4_FLAGS} -std=gnu11 -g -O2")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall --std=c++14 ${STM32F4_FLAGS}")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -T ${PROJECT_SOURCE_DIR}/linker/libopencm3_stm32f4.ld -nostartfiles --specs=rdimon.specs -g")
 
@@ -87,6 +87,8 @@ target_sources(ws2812.elf
     "src/button_consol.h"
     "src/timeout_module.c"
     "src/timeout_module.h"
+    "src/rgbhsi.c"
+    "src/rgbhsi.h"
 )
 
 target_link_libraries(${TARGET}.elf opencm3_stm32f4 m)

@@ -59,7 +59,7 @@ void decoder(char *s, int len)
 	}
 	if(my_strcmp(s, "version", len, 6) != -1)
 	{
-		print("[OK]: Version 1.0 mit Platine 1.0\n");
+		print("[OK]: Version 2.0 mit Platine 1.0\n");
 		return;
 	}
 	if(my_strcmp(s, "status", len, 6) != -1)
@@ -69,9 +69,10 @@ void decoder(char *s, int len)
 	}
 	if(my_strcmp(s, "help", len, 4) != -1)
 	{
+		print("[OK]:\n");
 		print("+++++++++++++++++++++++++++++++++++++++++\n");
 		print("High level commands:\n");
-		print("	set, get, version, status\n");
+		print("	set, get, version, status, identity\n");
 		print("set commands:\n");
 		print("	limit: Set a range of leds the collor\n");
 		print("		set limit r g b offset length mode\n");
@@ -101,6 +102,10 @@ void decoder(char *s, int len)
 		print("       get rgbw pos len\n");
 		print("+++++++++++++++++++++++++++++++++++++++++\n");
 		return;
+	}
+	if(my_strcmp(s, "identity", len, 9) != -1)
+	{
+		print("[OK]: Lightcontroller Software\n");
 	}
 	print("[ERROR]: no Commando found\n");
 }
