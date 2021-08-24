@@ -14,6 +14,7 @@
 #include "usart3.h"
 #include "button_consol.h"
 #include "timeout_module.h"
+#include "decoder.h"
 
 void init(void);
 
@@ -62,7 +63,7 @@ int main(void)
 		gpio_toggle(GPIOA, GPIO6);
 	}
 	enable_atx();
-	print("Welcome to Lightcontroller Version 2.0\n");
+	print("Welcome to Lightcontroller Version "SOFTWAREVERSION"\n");
 	print("Testing ATX\n");
 	print("Testing Buttons\n");
 	button_test();
@@ -92,6 +93,7 @@ int main(void)
 	setrgbvalues(255, 255, 255);
 	set_waitlength(4);
 	reset_timeout();
+	enable_uart5_consol();
 	print("[START]: Start main loop\n");
 	while(1 == 1)
 	{
@@ -109,11 +111,13 @@ int main(void)
 		check_timeout();
 		if(get_atx_status() == 0)
 		{
-			while(get_tick() < last_tick + 400)
+			while(get_tick() < last_tick + 10000)
 			{
 				if(get_button1() == 1)
 					break;
-				wait(50);
+				if(usart1_calc_rx_level() != 0)
+					break;
+				wait(70);
 				gpio_toggle(GPIOA, GPIO6);
 			}
 		}
