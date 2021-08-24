@@ -59,7 +59,7 @@ void decoder(char *s, int len)
 	}
 	if(my_strcmp(s, "version", len, 6) != -1)
 	{
-		print("[OK]: Version 2.0 mit Platine 1.0\n");
+		print("[OK]: Version "SOFTWAREVERSION" mit Platine "HARDWAREVERSION"\n");
 		return;
 	}
 	if(my_strcmp(s, "status", len, 6) != -1)
@@ -103,9 +103,10 @@ void decoder(char *s, int len)
 		print("+++++++++++++++++++++++++++++++++++++++++\n");
 		return;
 	}
-	if(my_strcmp(s, "identity", len, 9) != -1)
+	if(my_strcmp(s, "identity", len, 8) != -1)
 	{
-		print("[OK]: Lightcontroller Software\n");
+		print("[OK]: Lightcontroller Software "SOFTWAREVERSION"\n");
+		return;
 	}
 	print("[ERROR]: no Commando found\n");
 }
