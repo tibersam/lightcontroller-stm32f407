@@ -283,7 +283,7 @@ void hsitorgbw(float hue, float whitness, float blackness, uint8_t *red, uint8_t
 
 }
 */
-
+/*
 void hsitorgbw(float hue, float saturation, float intensity, uint8_t *red, uint8_t *green, uint8_t *blue, uint8_t *white)
 {
 	float r, g, b, w;
@@ -325,4 +325,50 @@ void hsitorgbw(float hue, float saturation, float intensity, uint8_t *red, uint8
 	*green = (uint8_t) 255.0f * g;
 	*blue = (uint8_t) 255.0f * b;
 	*white = (uint8_t) 255.0f * w;	
+}*/
+void hsitorgbw(float hue, float saturation, float intensity, uint8_t *red, uint8_t *green, uint8_t *blue, uint8_t *white)
+{
+	uint8_t r, g, b, w;
+	float cos_h, cos_1047_h;
+
+	hue = fmod(hue,360);
+	if(hue < 0)
+	{
+		hue = hue + 360;
+	}
+	hue = 3.14159f * hue/(float)180;
+	saturation = saturation>0?(saturation<1?saturation:1):0;
+	intensity = intensity>0?(intensity<1?intensity:1):0;
+
+	if(hue < 2.09439f){
+		cos_h = cos(hue);
+		cos_1047_h = cos(1.047196667f - hue);
+		r = saturation * 255.0f * (intensity/3.0f )*(1+cos_h/cos_1047_h);
+		g = saturation * 255.0f * (intensity/3.0f )*(1+(1-cos_h/cos_1047_h));
+		b = 0;
+		w = 255.0f * intensity *(1 - saturation);
+	}else if( hue < 4.188787f){
+		hue = hue - 2.09439f;
+		cos_h = cos(hue);
+		cos_1047_h = cos(1.047196667f - hue);
+		r = 0;
+		g = saturation * 255.0f * (intensity/3.0f)*(1+cos_h/cos_1047_h);
+		b = saturation * 255.0f * (intensity/3.0f)*(1+(1-cos_h/cos_1047_h));
+		w = 255.0f * intensity *(1 - saturation);
+	}else{
+		hue = hue - 4.188787f;
+		cos_h = cos(hue);
+		cos_1047_h = cos(1.047196667f - hue);
+		r = saturation * 255.0f * (intensity/3.0f)*(1+(1-cos_h/cos_1047_h));
+		g = 0;
+		b = saturation * 255.0f * (intensity/3.0f)*(1+cos_h/cos_1047_h);
+		w = 255.0f * intensity *(1 - saturation);
+	}
+	r = r >0.0f?(r<255.0f?r:255.0f):0.0f;
+	g = g >0.0f?(g<255.0f?g:255.0f):0.0f;
+	b = b >0.0f?(b<255.0f?b:255.0f):0.0f;
+	*red = (uint8_t)r;
+	*green = (uint8_t)g;
+	*blue = (uint8_t)b;
+	*white = (uint8_t)w;
 }
