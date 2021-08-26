@@ -40,6 +40,9 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
+      
+    - name: Install Toolchain
+      run: sudo apt-get -y install gcc-arm-none-eabi
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
