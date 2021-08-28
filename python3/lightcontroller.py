@@ -2,6 +2,7 @@
 import serial
 import logging
 import time
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -10,12 +11,32 @@ class ControllerUnresponsive(Exception):
         self.expression = expression
         self.message = message
 
+def test_serial_port(path):
+    com = serial.Serial(path, 115200, timeout=1)
+    com.write(bytes('identity \r', 'utf-8'))
+    for i in range(1, 3):
+        s = com.readline()
+        if s.find(bytes('[OK]: Lightcontroller Software', 'utf-8')) != -1:
+            return True
+    return False
+
+def find_serial_lightcontroller():
+    files = os.listdir('/dev')
+    for port in files:
+        if 'ttyUSB' in port:
+            if test_serial_port('/dev/' + port):
+                return '/dev/' + port
+    raise ValueError("Lightcontroller serial connection not found")
+
 class SerialBackend:
 
-    def __init__(self, path_to_serial, timeout=1):
+    def __init__(self, path_to_serial=None, timeout=1):
+        if path_to_serial is None:
+            path_to_serial = find_serial_lightcontroller()
         self.com = serial.Serial(path_to_serial, 115200,timeout=timeout)
         #self.com.write(bytes("set echo off\r", 'utf-8'))
         self.write("set echo off\r \r")
+        time.sleep(0.1)
         self.com.flush()
 
     def write(self, message):
@@ -25,10 +46,8 @@ class SerialBackend:
         while True:
             self.com.write(bytes(message, 'utf-8'))
             self.com.flush()
-            print(message)
             s = self.com.readline()
             if s.find(bytes("[OK]", 'utf-8')) != -1:
-                print(s)
                 return s
             print(s)
             logger.info("Tried to execute cmd {}, got {}".format(message, s))
@@ -44,7 +63,9 @@ class SerialBackend:
 
 class LightController:
 
-    def __init__(self, serialbackend):
+    def __init__(self, serialbackend=None):
+        if serialbackend is None:
+            serialbackend = SerialBackend()
         self.backend = serialbackend
         self.backend.clearup()
         self.mode = 1
