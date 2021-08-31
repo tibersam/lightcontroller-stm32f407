@@ -41,13 +41,14 @@ class SerialBackend:
 
     def write(self, message):
         self.com.reset_input_buffer()
-        logger.info("Message {}".format(message))
+        logger.info("Message: {}".format(message))
         counter = 0
         while True:
             self.com.write(bytes(message, 'utf-8'))
             self.com.flush()
             s = self.com.readline()
             if s.find(bytes("[OK]", 'utf-8')) != -1:
+                logger.info("Recieved: {}".format(s))
                 return s
             print(s)
             logger.info("Tried to execute cmd {}, got {}".format(message, s))
