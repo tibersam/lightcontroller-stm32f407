@@ -147,8 +147,7 @@ class LightController:
 
     def abortprevious(self):
         self.abortqueue.put("abort")
-        self.commandqueue.put("bla")
-        message = self.returnqueue.get()
+        message = self.write("bla",delay=0, retexpected=True)
         if not "ready" in message:
             raise ValueError("Backend not properly reset")
     
