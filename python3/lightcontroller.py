@@ -104,6 +104,7 @@ def lightcontrollerbackend(commandqueue, abortqueue, returnqueue, path_to_serial
                     returnqueue.put(ret)
     except StopLightController:
         pass
+    del com
     logger.info("Stop Lightcontrollerbackend")
 
 class LightController:
@@ -131,12 +132,14 @@ class LightController:
         logger.debug("destroy LightController")
         self.abortqueue.put("close ")
         logger.debug("send close")
-        self.commandqueue.put("identity \r")
+        self.write("identity \r")
         logger.debug("send identity, wait for closing")
         self.bthread.join()
         logger.info("LightController Backend stopped")
 
     def write(self, message, delay=0, retexpected=False):
+        if not self.bthread.is_alive():
+            raise ChildProcessError("Background thread of LightController died!. Might be a serial issue")
         writedic = {}
         writedic['message'] = message
         writedic['delay'] = delay
