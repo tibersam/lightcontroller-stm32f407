@@ -138,15 +138,16 @@ class LightController:
         logger.info("LightController Backend stopped")
 
     def write(self, message, delay=0, retexpected=False):
-        if not self.bthread.is_alive():
-            raise ChildProcessError("Background thread of LightController died!. Might be a serial issue")
         writedic = {}
         writedic['message'] = message
         writedic['delay'] = delay
         writedic['return'] = retexpected
         self.commandqueue.put(writedic)
         if retexpected:
-            return self.returnqueue.get()
+            try:
+                return self.returnqueue.get(timeout=300)
+            except queue.empty:
+                self.bthread.join()
 
     def abortprevious(self):
         self.abortqueue.put("abort")
@@ -154,6 +155,9 @@ class LightController:
         if not "ready" in message:
             raise ValueError("Backend not properly reset")
     
+    def backgroundthreadalive(self):
+        return self.bthread.is_alive()
+
     @property
     def atx(self):
         s = self.write("status\r", retexpected=True)
