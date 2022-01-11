@@ -98,7 +98,7 @@ def lightcontrollerbackend(commandqueue, abortqueue, returnqueue, path_to_serial
         while True:
             Check_abortqueue(abortqueue, commandqueue, returnqueue)
             command = commandqueue.get()
-            if not Check_abortqueue(abortqueue, commandqueue, returnqueue):
+            if not Check_abortqueue(abortqueue, commandqueue, returnqueue, delay=command['delay']):
                 ret = com.write(command['message'])
                 if command['return'] is True:
                     returnqueue.put(ret)
