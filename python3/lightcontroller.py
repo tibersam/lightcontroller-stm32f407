@@ -129,6 +129,9 @@ class LightController:
         logger.info("LightController Frontend initialised")
 
     def __del__(self):
+        self.stop_bthread()
+
+    def stop_bthread(self):
         logger.debug("destroy LightController")
         self.abortqueue.put("close ")
         logger.debug("send close")
@@ -147,7 +150,8 @@ class LightController:
             try:
                 return self.returnqueue.get(timeout=300)
             except queue.empty:
-                self.bthread.join()
+                self.stop_bthread()
+                raise RuntimeError("Backend of Lightcontroller not responsive. stopped")
 
     def abortprevious(self):
         self.abortqueue.put("abort")
