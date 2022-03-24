@@ -136,12 +136,12 @@ void process_get(char *s, int len)
 	{
 		process_get_rgbw( s + pos, len - pos);
 	}
-	int pos = my_strcmp(s, "mode", len, 4);
+	pos = my_strcmp(s, "mode", len, 4);
 	if(pos != -1)
 	{
 		process_get_mode();
 	}
-	int pos = my_strcmp(s, "step", len, 4);
+	pos = my_strcmp(s, "step", len, 4);
 	if(pos != -1)
 	{
 		process_get_step();
