@@ -16,6 +16,3 @@ in the build directory use make to build project
 make flash will build and flash firmware to microcontroller using st-link
 make debug-server uses st-link to setup a remote gdb interface. in second terminal execute make debug to open gdb
 
-# Sorry
-
-Sorry for the messy codebase
