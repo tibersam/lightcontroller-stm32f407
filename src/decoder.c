@@ -37,6 +37,10 @@ void process_get(char *s, int len);
 
 void process_get_rgbw(char *s, int len);
 
+void process_get_mode(void);
+
+void process_get_step(void);
+
 void decoder(char *s, int len)
 {
 	int pos = 0;
@@ -132,6 +136,30 @@ void process_get(char *s, int len)
 	{
 		process_get_rgbw( s + pos, len - pos);
 	}
+	pos = my_strcmp(s, "mode", len, 4);
+	if(pos != -1)
+	{
+		process_get_mode();
+	}
+	pos = my_strcmp(s, "step", len, 4);
+	if(pos != -1)
+	{
+		process_get_step();
+	}
+}
+
+void process_get_mode(void)
+{
+	print("[OK]: mode is 0x");
+	char_to_asciihex((char) get_stepmode());
+	print("\n");
+}
+
+void process_get_step(void)
+{
+	print("[OK]: step is 0x");
+	uint32_t_to_asciihex((uint32_t) get_waitlength());
+	print("\n");
 }
 
 void process_get_rgbw(char *s, int len)
