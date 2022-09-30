@@ -1,0 +1,15 @@
+name: "Linter"
+
+on: [push]
+
+jobs:
+  black:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: pip3 install black
+      - run: |
+          black --version
+          black --check --diff .
+
+
