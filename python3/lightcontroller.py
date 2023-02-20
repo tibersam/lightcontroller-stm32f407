@@ -1,11 +1,11 @@
 #!/usr/bin/python3
-from threading import Thread
-import time
-import os
-import serial
-import queue
-
 import logging
+import os
+import queue
+import time
+from threading import Thread
+
+import serial
 
 logger = logging.getLogger(__name__)
 
@@ -153,7 +153,7 @@ class LightController:
         self.step = 4
         self.timeout = 4 * 60 * 60 * 1000  # 4 hours in us
         message = self.returnqueue.get(timeout=20)
-        if not "ready" in message:
+        if "ready" not in message:
             raise ValueError("Backend took more than 20 seconds to initialise")
         logger.info("LightController Frontend initialised")
 
@@ -185,7 +185,7 @@ class LightController:
     def abortprevious(self):
         self.abortqueue.put("abort")
         message = self.write("bla", delay=0, retexpected=True)
-        if not "ready" in message:
+        if "ready" not in message:
             raise ValueError("Backend not properly reset")
 
     def backgroundthreadalive(self):
@@ -270,8 +270,6 @@ class LightController:
 
 
 if __name__ == "__main__":
-    import time
-
     # backend = SerialBackend('/dev/ttyUSB0')
     # backend.clearup()
     # time.sleep(1)
