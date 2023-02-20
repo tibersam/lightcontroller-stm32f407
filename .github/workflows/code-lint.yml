@@ -8,8 +8,36 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: pip3 install black
-      - run: |
-          black --version
-          black --check --diff .
+      - run: black --version
+      - run: black --check --diff .
+  flake8:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: pip3 install flake8
+      - run: flake8 --exclude .git,__pycache__ --max-line-length 88 python3
+  isort:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: pip3 install isort
+      - run: isort --version
+      - run: cd python3 && isort -c --diff --profile black . && cd ..
+
+  pytest:
+    needs: [black, flake8, isort]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.7', '3.8', '3.9', '3.10', 'pypy3.7', 'pypy3.8', 'pypy3.9']
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{matrix.python-version}}
+          cache: 'pip'
+      - run: pip install -r python3/requirements.txt
+      - run: python3 -m pytest python3 -vv
+
 
 
