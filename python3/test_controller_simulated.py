@@ -80,3 +80,9 @@ def test_decode_rgb():
     assert decode("set rgb 1 256 1") == "[ERROR]: Value Error\n"
     assert decode("set rgb 1 1 -1") == "[ERROR]: Value Error\n"
     assert decode("set rgb 1 1 256") == "[ERROR]: Value Error\n"
+
+
+def test_timeout():
+    assert decode("set timeout 5") == "[OK]: Set timeout\n"
+    assert decode("set timeout -5") == "[ERROR]: Error in decoding timeout\n"
+    assert decode("set timeout 4394967296") == "[ERROR]: Error in decoding timeout\n"

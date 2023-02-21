@@ -53,6 +53,9 @@ def decode(input: str) -> str:
     ret = decode_and_call(input, "set rgb {r:d} {g:d} {b:d}", decode_rgb)
     if ret is not None:
         return ret
+    ret = decode_and_call(input, "set timeout {timeout:d}", decode_timeout)
+    if ret is not None:
+        return ret
 
 
 def decode_mode(input):
@@ -96,6 +99,7 @@ def decode_step(input):
 
 
 def decode_rgb(input):
+    global controller
     if "r" not in input:
         return "[ERROR]: Argument to short, Red missing for setrgb\n"
     if "g" not in input:
@@ -117,6 +121,14 @@ def decode_rgb(input):
         led.g = input["g"]
         led.b = input["b"]
     return "[OK] set rgb values\n"
+
+
+def decode_timeout(input):
+    global controller
+    if input["timeout"] < 0 or input["timeout"] > 2 ^ 32:
+        return "[ERROR]: Error in decoding timeout\n"
+    controller.timeout = input["timeout"]
+    return "[OK]: Set timeout\n"
 
 
 def simulate_behavior(input: str) -> str:
