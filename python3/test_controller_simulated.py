@@ -70,3 +70,13 @@ def test_decode_step():
     assert decode("set step 1") == "[OK]: Set step length\n"
     assert decode("set step -1") == "[ERROR] Missing step argument\n"
     assert decode("set step 4394967296") == "[ERROR] Missing step argument\n"
+
+
+def test_decode_rgb():
+    assert decode("set rgb 1 1 1") == "[OK] set rgb values\n"
+    assert decode("set rgb -1 1 1") == "[ERROR]: Value Error\n"
+    assert decode("set rgb 256 1 1") == "[ERROR]: Value Error\n"
+    assert decode("set rgb 1 -1 1") == "[ERROR]: Value Error\n"
+    assert decode("set rgb 1 256 1") == "[ERROR]: Value Error\n"
+    assert decode("set rgb 1 1 -1") == "[ERROR]: Value Error\n"
+    assert decode("set rgb 1 1 256") == "[ERROR]: Value Error\n"

@@ -50,6 +50,9 @@ def decode(input: str) -> str:
     ret = decode_and_call(input, "set step {step:d}", decode_step)
     if ret is not None:
         return ret
+    ret = decode_and_call(input, "set rgb {r:d} {g:d} {b:d}", decode_rgb)
+    if ret is not None:
+        return ret
 
 
 def decode_mode(input):
@@ -90,6 +93,30 @@ def decode_step(input):
         return "[ERROR] Missing step argument\n"
     controller.step = input["step"]
     return "[OK]: Set step length\n"
+
+
+def decode_rgb(input):
+    if "r" not in input:
+        return "[ERROR]: Argument to short, Red missing for setrgb\n"
+    if "g" not in input:
+        return "[ERROR]: Argument to short, Green missing for setrgb\n"
+    if "b" not in input:
+        return "[ERROR]: Argument to short, Blue missing for setrgb\n"
+
+    if (
+        input["r"] < 0
+        or input["r"] >= 255
+        or input["g"] < 0
+        or input["g"] >= 255
+        or input["r"] < 0
+        or input["r"] >= 255
+    ):
+        return "[ERROR]: Value Error\n"
+    for led in controller.leds:
+        led.r = input["r"]
+        led.g = input["g"]
+        led.b = input["b"]
+    return "[OK] set rgb values\n"
 
 
 def simulate_behavior(input: str) -> str:
