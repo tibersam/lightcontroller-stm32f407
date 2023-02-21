@@ -1,8 +1,8 @@
+import logging
 from typing import List
 
 import parse
 from pydantic import BaseModel, Field
-import logging
 
 logger = logging.getLogger(__name__)
 
