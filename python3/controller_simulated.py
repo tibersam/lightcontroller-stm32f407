@@ -6,6 +6,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 class LED(BaseModel):
     r: int = 0
     g: int = 0
