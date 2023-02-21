@@ -108,8 +108,8 @@ def decode_rgb(input):
         or input["r"] >= 255
         or input["g"] < 0
         or input["g"] >= 255
-        or input["r"] < 0
-        or input["r"] >= 255
+        or input["b"] < 0
+        or input["b"] >= 255
     ):
         return "[ERROR]: Value Error\n"
     for led in controller.leds:
