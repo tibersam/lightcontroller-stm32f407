@@ -2,7 +2,9 @@ from typing import List
 
 import parse
 from pydantic import BaseModel, Field
+import logging
 
+logger = logging.getLogger(__name__)
 
 class LED(BaseModel):
     r: int = 0
@@ -27,9 +29,9 @@ def decode_and_call(input: str, formatstring: str, callfunction):
     decode = parse.parse(formatstring, input)
     if decode is None:
         return None
-    print(decode)
+    logger.debug(decode)
     ret = callfunction(decode.named)
-    print(ret)
+    logger.debug(ret)
     return ret
 
 
