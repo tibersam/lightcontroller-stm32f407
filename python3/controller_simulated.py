@@ -47,6 +47,9 @@ def decode(input: str) -> str:
     )
     if ret is not None:
         return ret
+    ret = decode_and_call(input, "set step {step:d}", decode_step)
+    if ret is not None:
+        return ret
 
 
 def decode_mode(input):
@@ -79,6 +82,14 @@ def decode_limit(input):
         controller.leds[i].g = input["g"]
         controller.leds[i].b = input["b"]
     return "[OK]: set limit rgb done\n"
+
+
+def decode_step(input):
+    global controller
+    if input["step"] < 0 or input["step"] >= 2 ^ 32:
+        return "[ERROR] Missing step argument\n"
+    controller.step = input["step"]
+    return "[OK]: Set step length\n"
 
 
 def simulate_behavior(input: str) -> str:

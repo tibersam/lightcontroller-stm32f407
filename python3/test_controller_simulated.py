@@ -64,3 +64,9 @@ def test_decode_limit():
         == """[ERROR]: Something went wrong!
 [ERROR]: set limit r g b offset length mode\n"""
     )
+
+
+def test_decode_step():
+    assert decode("set step 1") == "[OK]: Set step length\n"
+    assert decode("set step -1") == "[ERROR] Missing step argument\n"
+    assert decode("set step 4394967296") == "[ERROR] Missing step argument\n"
