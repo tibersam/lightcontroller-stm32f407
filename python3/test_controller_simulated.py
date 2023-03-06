@@ -86,3 +86,21 @@ def test_timeout():
     assert decode("set timeout 5") == "[OK]: Set timeout\n"
     assert decode("set timeout -5") == "[ERROR]: Error in decoding timeout\n"
     assert decode("set timeout 4394967296") == "[ERROR]: Error in decoding timeout\n"
+
+
+def test_lights():
+    assert decode("set lights off") == "[OK]: lights off\n"
+    assert decode("set lights on") == "[OK]: lights on\n"
+    assert decode("set lights asdf") == "[ERROR]: lights only takes on|off\n"
+
+
+def test_set_atx():
+    assert decode("set atx on") == "[ATX] Send endable signal\n[OK]: ATX on\n"
+    assert decode("set atx off") == "[OK]: remove enable signal\n[ATX]: Atx off\n"
+    assert decode("set atx asdf") == ""
+
+
+def test_set_uart5con():
+    assert decode("set uart5con on") == "[OK]: Enable uart5 consol\n"
+    assert decode("set uart5con off") == "[OK]: Disable uart5 consol\n"
+    assert decode("set uart5con asdf") == "[ERROR]: uart5con on or off\n"

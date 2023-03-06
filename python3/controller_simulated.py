@@ -56,6 +56,15 @@ def decode(input: str) -> str:
     ret = decode_and_call(input, "set timeout {timeout:d}", decode_timeout)
     if ret is not None:
         return ret
+    ret = decode_and_call(input, "set lights {state:w}", decode_lights)
+    if ret is not None:
+        return ret
+    ret = decode_and_call(input, "set atx {atx:w}", decode_atx)
+    if ret is not None:
+        return ret
+    ret = decode_and_call(input, "set uart5con {uart5con:w}", decode_uart5con)
+    if ret is not None:
+        return ret
 
 
 def decode_mode(input):
@@ -129,6 +138,47 @@ def decode_timeout(input):
         return "[ERROR]: Error in decoding timeout\n"
     controller.timeout = input["timeout"]
     return "[OK]: Set timeout\n"
+
+
+def decode_lights(input):
+    global controller
+    if input["state"] == "on":
+        for led in controller.leds:
+            led.r = 0
+            led.g = 0
+            led.b = 0
+        controller.atx = True
+        return "[OK]: lights on\n"
+    if input["state"] == "off":
+        for led in controller.leds:
+            led.r = 255
+            led.g = 255
+            led.b = 255
+        controller.atx = False
+        return "[OK]: lights off\n"
+    return "[ERROR]: lights only takes on|off\n"
+
+
+def decode_atx(input):
+    global controller
+    if input["atx"] == "on":
+        controller.atx = True
+        return "[ATX] Send endable signal\n[OK]: ATX on\n"
+    if input["atx"] == "off":
+        controller.atx = False
+        return "[OK]: remove enable signal\n[ATX]: Atx off\n"
+    return ""
+
+
+def decode_uart5con(input):
+    global controller
+    if input["uart5con"] == "on":
+        controller.uart5con = True
+        return "[OK]: Enable uart5 consol\n"
+    if input["uart5con"] == "off":
+        controller.uart5con = False
+        return "[OK]: Disable uart5 consol\n"
+    return "[ERROR]: uart5con on or off\n"
 
 
 def simulate_behavior(input: str) -> str:
