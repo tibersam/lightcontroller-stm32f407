@@ -169,6 +169,7 @@ def decode_atx(input):
         return "[OK]: remove enable signal\n[ATX]: Atx off\n"
     return ""
 
+
 def decode_uart5con(input):
     global controller
     if input["uart5con"] == "on":
@@ -178,6 +179,7 @@ def decode_uart5con(input):
         controller.uart5con = False
         return "[OK]: Disable uart5 consol\n"
     return "[ERROR]: uart5con on or off\n"
+
 
 def simulate_behavior(input: str) -> str:
     mode = parse.compile("set mode {mode:d}")
