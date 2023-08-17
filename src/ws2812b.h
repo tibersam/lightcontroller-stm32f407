@@ -83,7 +83,7 @@ typedef struct{
 void initledmodule(void);
 void setupmoduleclock(void);
 void setupmodulegpio(void);
-void setupspi(uint32_t spi);
+void setupspi(uint32_t spi, uint32_t rstspi);
 void setupdma(uint32_t dma, uint8_t stream, uint32_t channel, uint32_t spi_address, uint32_t offset, uint16_t numberled);
 uint8_t inflatetwobits(uint8_t data, uint8_t mask1, uint8_t mask0);
 void inflatebyte(uint8_t data, int i);

@@ -46,16 +46,16 @@ void initledmodule(void)
 	setupmoduleclock();
 	setupmodulegpio();
 #ifdef USESPI1
-	setupspi(SPI1);
+	setupspi(SPI1, RST_SPI1);
 #endif
 #ifdef USESPI4
-	setupspi(SPI4);
+	setupspi(SPI4, RST_SPI4);
 #endif
 #ifdef USESPI2
-	setupspi(SPI2);
+	setupspi(SPI2, RST_SPI2);
 #endif
 #ifdef USESPI3
-	setupspi(SPI3);
+	setupspi(SPI3, RST_SPI3);
 #endif
 	for(i = 0; i < NUMBERLED; i++)
 	{
@@ -144,11 +144,11 @@ void setupmoduleclock(void)
 	rcc_periph_clock_enable(RCC_SPI4);
 #endif
 }
-void setupspi(uint32_t spi)
+void setupspi(uint32_t spi, uint32_t rstspi)
 {
-	spi_reset(spi);
+	rcc_periph_reset_pulse(rstspi);
 	spi_set_baudrate_prescaler(spi,5);
-	
+
 	spi_set_standard_mode(spi, 1);
 	spi_enable_software_slave_management(spi);
 	spi_set_nss_high(spi);
